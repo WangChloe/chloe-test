@@ -7,14 +7,17 @@ var chloeApp = angular.module('c', [
 // chloeApp.config(function($routeProvider) {
 chloeApp.config(function($stateProvider, $urlRouterProvider){
 	// $routeProvider.when('/hello', {
-	$urlRouterProvider.when('', '/hello');
+	$urlRouterProvider.otherwise('/hello');
+	//another method
+	//$urlRouterProvider.when('', '/hello');
+
 	$stateProvider
-	.state('/hello',{
+	.state('hello',{
 		url: '/hello',
 		templateUrl: 'view/hello.html',
 		controller: 'HelloCtrl'
 	})
-	.state('/list',{
+	.state('list',{
 		url: '/list',
 		templateUrl: 'view/list.html',
 		controller: 'ListCtrl'
