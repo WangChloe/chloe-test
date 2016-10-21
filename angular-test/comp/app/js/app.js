@@ -19,6 +19,7 @@ chloeApp.config(function($stateProvider, $urlRouterProvider){
 		templateUrl: 'view/list.html',
 		controller: 'ListCtrl'
 	});
+	//ui-router no support
 	// .otherwise({
 	// 	redirectTo: '/hello'
 	// });
