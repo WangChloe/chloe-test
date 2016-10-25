@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>ng-bind change css</title>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<div ng-controller="showCtrl">
+		<button ng-click="toggleMenu()">Toggle Menu</button>
+		<ul ng-show="menuState.show">
+			<li ng-click="stun()">Stun</li>
+			<li ng-click="dis()">Dis</li>
+			<li ng-click="erase()">Erase</li>
+		</ul>
+	</div>
+</body>
+<script src="framework/js/angular.min.js"></script>
+<script src="js/main.js"></script>
+</html>

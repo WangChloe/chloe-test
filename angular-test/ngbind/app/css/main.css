@@ -1,0 +1,6 @@
+.text-red, .error {
+	color: red;
+}
+.text-green, .warning {
+	color: green;
+}

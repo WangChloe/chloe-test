@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<html ng-app="userInfo">
+<html ng-app="userInfoModule">
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<link rel="stylesheet" href="framework/css/bootstrap.min.css">
 	<script src="framework/js/angular.min.js"></script>
 	<script src="framework/js/angular-ui-router.min.js"></script>
+	<script src="js/form.js"></script>
 </head>
 <body>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<div class="panel-title">ng-bind</div>
-		</div>
+		</div> 
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-md-12">
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" ng-controller="userCtrl">
 						<div class="form-group">
 							<label class="col-md-2 control-label" >
 								email:
 							</label>
 							<div class="col-md-10">
-								<input type="emial" class="form-control">
+								<input type="email" class="form-control" ng-model="userInfo.email">
 							</div>
 						</div>
 						<div class="form-group">
@@ -29,16 +30,26 @@
 								pdw:
 							</label>
 							<div class="col-md-10">
-								<input type="password" class="form-control">
+								<input type="password" class="form-control" ng-model="userInfo.password">
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-md-offset-2 col-md-10">
 								<div class="checkbox">
 									<label>
-										<input type="checkbox">login
+										<input type="checkbox" ng-model="userInfo.autoLogin">login
 									</label>
 								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-offset-2 col-md-10">
+								<button class="btn btn-default" ng-click="getFormData()">
+									getFormData
+								</button>
+								<button class="btn btn-default" ng-click="setFormData()">
+									setFormData
+								</button>
 							</div>
 						</div>
 					</form>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<meta charset="UTF-8">
+	<title>ng-bind change css</title>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<div ng-controller="cssCtrl">
+		<p class="text-{{color}}">test css style</p>
+		<button class="btn btn-default" ng-click="setGreen()">
+			Green
+		</button>
+		<div ng-class='{error: isError, warning: isWarning}'>{{message}}</div>
+		<button ng-click='showError()'>Error</button>
+		<button ng-click='showWarning()'>Warning</button>
+	</div>
+</body>
+<script src="framework/js/angular.min.js"></script>
+<script src="js/main.js"></script>
+</html>
