@@ -1,9 +1,9 @@
 var routerApp = angular.module('routerApp',['ui.router']);
 routerApp.config(function($stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise('/index');
+		$urlRouterProvider.otherwise('/');		//open html
 		$stateProvider
 			.state('index', {
-				url: '/index',
+				url: '/',
 				views: {
 					'': {
 						templateUrl: 'view/index.html'
@@ -19,7 +19,7 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
 			.state('index.usermng', {
 				url: '/user',
 				views: {
-					'main@index': {
+					'main@index': {		//replace html
 						templateUrl: 'view/usermng.html',
 						controller: function($scope, $state) {
 							$scope.addUserType = function() {
