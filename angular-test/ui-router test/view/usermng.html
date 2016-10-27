@@ -1,0 +1,22 @@
+<div class="row">
+	<div class="col-md-3">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="list-group">
+					<a ui-sref="#" class="list-group-item active">divide user</a>
+					<a ui-sref="index.usermng.high" class="list-group-item">high</a>
+					<a ui-sref="index.usermng.normal" class="list-group-item">normal</a>
+					<a ui-sref="index.usermng.low" class="list-group-item">low</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-primary" ng-click="addUserType()">add user</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div ui-view></div>
+	</div>
+</div>

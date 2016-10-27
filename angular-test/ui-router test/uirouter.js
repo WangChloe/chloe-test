@@ -1,9 +1,8 @@
-var routerApp = angular.module('routerApp',[ui.router]);
-routerApp.config(['$stateProvider','$urlRouterProvider', 
-	function($stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise('/');
+var routerApp = angular.module('routerApp',['ui.router']);
+routerApp.config(function($stateProvider, $urlRouterProvider) {
+		$urlRouterProvider.otherwise('/index');
 		$stateProvider
-			.state('idnex', {
+			.state('index', {
 				url: '/index',
 				views: {
 					'': {
@@ -17,38 +16,38 @@ routerApp.config(['$stateProvider','$urlRouterProvider',
 					}
 				}
 			})
-			.state('index.usermng'), {
-				url: '/usermng',
+			.state('index.usermng', {
+				url: '/user',
 				views: {
 					'main@index': {
 						templateUrl: 'view/usermng.html',
 						controller: function($scope, $state) {
 							$scope.addUserType = function() {
-								$state.go('index.usermng.addUserType');
+								$state.go('index.usermng.addusertype');
 							}
 						} 
 					}
 				}
-			}
-			.state('index.usermng.highendusers', {
+			})
+			.state('index.usermng.high', {
 				url: '/highendusers',
-				templateUrl: 'view/highendusers.html'
+				templateUrl: 'view/high.html'
 			})
-			.state('index.usermng.normalusers', {
+			.state('index.usermng.normal', {
 				url: '/normalusers',
-				templateUrl: 'view/normalusers.html'
+				templateUrl: 'view/normal.html'
 			})
-			.state('index.usermng.lowusers', {
+			.state('index.usermng.low', {
 				url: '/lowusers',
-				templateUrl: 'view/lowusers.html'
+				templateUrl: 'view/low.html'
 			})
 			.state('index.usermng.addusertype', {
 				url: '/addusertype',
-				templateUrl: 'view/addusertypeform.html',
+				templateUrl: 'view/adduser.html',
 				controller: function($scope, $state) {
 					$scope.backToPrevious = function() {
 						window.history.back();
 					}
 				}
 			})
-	}])
+	})
