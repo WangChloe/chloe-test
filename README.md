@@ -626,3 +626,120 @@ for(var i = 0; i < arr.length; i++) {
 		i--;
 	}
 }
+
+##11.21
+
+###预解析
+####变量和函数的定义会预先解析,解析在script标签内的最上面
+####作用域：(1)script (2)函数
+eg:
+var a = 111;
+function show() {
+	alert(a);		//相当于var a;
+	var a = 12;		//		alert(a);
+					//		a = 12;
+}
+show();	//返回undefined
+
+###引用
+####引用类型：数组 函数 对象
+
+###字符串的其他方法
+####str.charCodeAt(index);	//查看字母对应ASCII编码	a->0x61=97	b->0x62=98
+####已知计算机编码查对应单词
+####String.fromCharCode('0x4e00')	第一个中文 	 0x4e00 一		!important
+####								最后一个中文 0x9fa5	龥(yu)	!important
+
+####unicode编码：统一编码 utf-8 utf-16 utf-32	以\u开头 \u4e00(一) ~ \u9fa5(龥)
+####GB2312编码
+
+###字节长度和编码的关系
+####英文、数字都占1个字节，与编码格式无关
+####utf-8：中文占3个字节
+####GB2312：中文占2个字节
+
+###封装一个求字节长度的函数
+function getByLen(str,type) {	//getBytesLen	传入字符串和编码格式
+	var result = 0;
+	for(var i = 0; i < str.length; i++) {
+		if(str.charAt(i) >= '\u4e00' && str.charAt(i) <= '\u9fa5') {
+			if(type == 'gb2312') {
+				result += 2;
+			} else {
+				result += 3;
+			}
+		} else {
+			result++;
+		}
+	}
+	return result;
+}
+
+###判断json内某个属性存不存在
+eg:var json = {a:1, b:2};
+   alert('c' in json);	//false
+
+###非严格模式下，变量定义没有var时为全局变量，全局的东西都属于window !important
+function show(){
+	a = 12;		//a没有var时a为全局变量
+	alert(a);	//1. 12
+}
+show();		//需先调用show函数
+alert(a);	//2. 12
+####函数内部使用连等定义变量，第一个是局部变量，其余是全局变量
+eg: function show(){
+		var a=b=c=1;	//a是局部变量，b、c是全局变量
+	}
+
+###捕获异常
+try {
+	//code
+} catch(ex) {	//exception
+	//错误的提示信息
+	//补救的代码
+}
+
+####查看错误信息	ex.message
+####用处：1.屏蔽错误信息 	2.代替if
+####缺点：性能略低
+
+###逗号运算符 以最后一个为准	eg:var a=(1,2,3);	//a=3
+for(var i=0,j=5,k=8; i<10,j<10,k<10; i++,j++,k++) {
+
+}
+alert(i+j+k);	//2+7+10=19
+
+###严格模式
+####在script标签内最上面写 'use strict';
+####好处：1.定义变量不带var报错  2.不允许在if while for里面定义函数
+####作用域：(1)当前script标签内 (2)函数  (3)js文件
+
+###js的组成部分
+####1.ECMA(ECMAScript)：js核心，解析器，解析语法	eg:if()	arr.pop()
+####			 兼容：完全兼容，目前主要是ES4.0
+####2.DOM(Document Object Model)文档对象模型               ####eg:document.getElementById('id')	  oDiv.style.background='red';
+####			 兼容：大部分兼容，不兼容可以处理
+####3.BOM(Browser Object Model)浏览器对象模型
+####eg:window.navigator.userAgent  alert();
+####			 兼容：没有兼容性问题，根本就不兼容，兼容处理不了
+
+###节点关系
+####1.父子节点
+####	子节点（一级，一层）：父级.children;
+####	父节点：子节点.parentNode
+####2.兄弟节点
+####	上一个兄弟节点：obj.previousElementSibling
+####					兼容：高级浏览器
+####					obj.previousSibling  兼容：都兼容
+####										 高级浏览器 -> object text
+####										 低级浏览器 -> 能获取相应的节点
+####					处理兼容 1)if-else
+####							 2)||
+####		兼容写法：var oPrev = obj.previousElementSibling||obj.previousSibling;
+####	下一个兄弟节点：obj.nextElementSibling
+####					兼容高级浏览器
+####					obj.nextSibling  兼容：都兼容
+####										 高级浏览器 -> object text
+####										 低级浏览器 -> 能获取相应的节点
+####		兼容写法：var oNext = obj.nextElementSibling||obj.nextSibling;
+####3.首尾节点
