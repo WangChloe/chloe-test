@@ -743,3 +743,100 @@ alert(i+j+k);	//2+7+10=19
 ####										 低级浏览器 -> 能获取相应的节点
 ####		兼容写法：var oNext = obj.nextElementSibling||obj.nextSibling;
 ####3.首尾节点
+
+##11.22
+
+###DOM节点关系
+####3.首尾节点
+####	首节点：父级.firstElementChild
+####			兼容：高级浏览器
+####				低级浏览器：undefined
+####			父级.firstChild 兼容：都兼容
+####							高级浏览器：文本节点
+####							低级浏览器：可以正确地获取
+####			兼容写法：(1)父级.firstElementChild||父级.firstChild
+####					  (2)父级.children[0]
+####	尾节点：父级.lastElementChild
+####			兼容：高级浏览器
+####				低级浏览器：undefined
+####			父级.lastChild 兼容：都兼容
+####							高级浏览器：文本节点
+####							低级浏览器：可以正确地获取
+####			兼容写法：(1)父级.lastElementChild||父级.lastChild
+####					  (2)父级.children[父级.children.length-1]
+
+###DOM操作
+####1.创建一个节点
+####	var obj = document.createElement(节点名称);
+####2.添加一个节点(所有的添加功能都相当于剪切功能)
+####	父级.appendChild(要添加的节点);
+####	父级.insertBefore(要添加的节点,在谁前面添加);
+####3.删除一个节点
+####	父级.removeChild(要删除的节点);
+####4.替换一个节点
+####	replaceChild();
+
+###BOM
+####1.window.open(地址, 方式);	返回值：新的窗体对象
+####			Chrome：拦截
+####			FF：阻止
+####			IE：直接打开
+####			*：只要是用户自己打开的都不拦截
+####	打开方式：1)_blank 新窗口打开(默认)
+####			  2)_self  当前页面打开
+####			about:blank 空白页
+####2.window.close();
+####			Chrome：直接关闭
+####			FF：没有反应
+####			IE：提示
+####			*：只能关闭自己open出来的窗口
+####3.window.location  获取地址栏信息	返回值数据类型：对象object
+####	window.location.href  获取地址栏信息	返回值数据类型：字符串string
+####	window.location.search  获取地址栏信息中的数据 返回值：?(包括?)后面的值
+####	window.location.hash  获取地址栏信息中的锚点   返回值：#(包括#)后面的值
+
+####	window.location.protocol  获取地址栏信息中的协议  返回值：eg:http:
+####	window.location.host  获取地址栏信息中的域名  返回值：eg:localhost:63342或baidu.com
+####	window.location.port  获取地址栏信息中的端口  返回值：eg:63342
+####	window.location.pathname  获取地址栏信息中的路径  返回值：eg:/../../.. .html
+####4.window.history  获取地址的历史信息
+####	window.history.forward()	前进
+####	window.history.back()		后退
+####	window.history.go(数字)		前进时数字>0 1代表前进1个页面
+####								后退时数字<0 -1代表后退1个页面
+
+###右下角悬浮框(富媒体)
+####position:fixed (固定定位)  IE6不兼容
+####imgT = 可视区的高度-物体本身的高度+滚动的高度
+
+####滚动高度：
+####	html简写 document.documentElement
+####	document.body.scrollTop
+####		兼容：Chrom
+####		其他：0
+####	document.documentElement.scrollTop
+####		兼容：IE、FF
+####		其他：0
+####	纵向兼容写法：var scrollT = document.documentElement.scrollTop||document.body.scrollTop;
+####	横向兼容写法：var scrollL = document.documentElement.scrollLeft||document.body.scrollLeft;
+
+####可视区高度：document.documentElement.clientHeight
+####可视区宽度：document.documentElement.clientWidth
+####兼容：全兼容
+
+####物体的高度：obj.offsetHeight
+####物体的宽度：obj.offsetWidth
+####                     offsetHeight                       getStyle()
+####返回值：               数字   			                 字符串
+####               获取的是盒模型的大小				     获取的是height
+####          (width/height+padding+border)
+####display:none后           0                                可以获取
+
+####滚动高度 var scrollT = document.documentElement.scrollTop||document.body.scrollTop;
+####可视区高度 var clientH = documnet.documentElement.clientHeight;
+####物体高度 var oDivH = document.offsetHeight;
+####var top = clientH - oDivH + scrollT;
+####oDiv.style.top = top + 'px';
+
+####window.onscroll  当滚动滚动条的时候
+####window.onresize  当缩放浏览器的时候
