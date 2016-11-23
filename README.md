@@ -840,3 +840,54 @@ alert(i+j+k);	//2+7+10=19
 
 ####window.onscroll  当滚动滚动条的时候
 ####window.onresize  当缩放浏览器的时候
+
+##11.23
+
+###物体距离左边/上边的距离
+####obj.offsetLeft  距离有定位父级的
+####obj.offsetTop   距离有定位父级的
+
+####obj.parentNode  结构上的父级
+####obj.offsetParent定位上的父级
+####					祖宗：body
+
+####封装一个求物体距离上边/左边的绝对位置的函数
+function getPos(obj) {
+	var l = 0;	//距离左边的绝对距离
+	var t = 0; // 距离上边的绝对距离
+	while(obj) {
+		l += obj.offsetLeft;
+		t += obj.offsetTop;
+		obj = obj.offsetParent;
+	}
+	return {left:l, top:t};
+}
+
+###应用：懒加载
+####慢点加载 好处：节省资源 节省带宽
+####让一个图片不加载：不给src 属性src改为_src onscorll或onresize时设置src!important
+
+###操作属性
+####(1).
+####(2)[]
+####(3)obj.getAttribute(属性的名字)	     获取属性
+####   obj.setAttribute(属性的名字, 值)  设置属性
+####   obj.removeAttribute(属性的名字)   删除属性
+
+####tips:获取设置属性方法不能混用，要配套使用。eg:不能同时用.和getAttribute()
+
+###应用：瀑布流
+####特点：(1)宽度一致，高度参差不齐
+####	  (2)滚不完，一直可以加载新图片
+####条件：滚动高度+可视区高度 >= body高度(offsetHeight)
+####浮动问题解决：方法1.清除浮动
+####	  		  方法2.判断条件：scrollT + clientH >= document.body.scrollHeight
+
+####物体内容的高度：obj.scrollHeight
+####内容高度>盒模型高度 取内容高度
+####内容高度<盒模型高度 取盒模型高度
+
+####伪数组排序：先将伪数组挨个push进arr，再用arr.sort(function...)。
+
+###应用：吸顶条
+
