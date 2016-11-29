@@ -891,3 +891,588 @@ function getPos(obj) {
 
 ###应用：吸顶条
 
+##11.24
+
+###添加元素
+####1.appendChild()
+####  insertBefore()
+####2.innerHTML
+####	问题：会清空之前元素身上的事件
+####	原因：innerHTML先清空所有的元素
+
+###文本提示框
+####聚焦：oT.onfocus
+####失焦：oT.onblur
+####强制获取一个焦点：oT.focus();
+####强制失去一个焦点：oT.blur();
+
+###预加载
+####增强用户体验
+####创建图片方法：方法1：document.createElement('img');
+####			  方法2：var oImg = new Image();
+
+####图片事件
+####1.oImg.onload   加载成功触发
+####2.oImg.onerror 	加载失败触发
+
+####img的bug: 上下有间距  解决方法：img{vertical-align: top;}	!important
+
+####加载图片的进度条
+
+oImg.onload = function() {
+	count++;
+	oDiv.style.width = count / total * 100 + '%';
+	oSpan.innerHTML = (count / total * 100).toFixed(2) + '%';
+}
+
+
+####保留两位小数：num.toFixed(保留小数个数);  自动四舍五入
+
+###form表单
+####想要提交数据需有
+####1.action 提交的地址 <form action=''></form>
+####2.name   数据名称	<input name=''>
+####3.value  数据       input.value
+
+####提交方式
+####1.get(默认)	不安全，  有缓存，  容量32K左右
+####		好处：(1)分享 (2)收藏
+####2.post      相对安全，没有缓存，容量1G左右
+
+####缓存(cache)
+####对于浏览器而言，相同的地址只会访问一次
+
+###点击页面弹1
+####document.onclick = function(){}
+####父级：parentNode	结构父级	根：document
+####父级：offsetParent	定位父级	根：body
+
+###事件对象
+####事件：用户操作
+####事件对象：描述事件更加详细的信息
+####	event(事件对象)	      兼容：Chrome IE系	(FF报错)
+####	ev(事件函数传入参数)  兼容：高级浏览器(Chrome、FF、IE9+)	(IE8-返回undefined)
+####	兼容写法：var oEvent = ev || event;
+
+####查看鼠标点击的位置
+####X轴：oEvent.clientX
+####Y轴：oEvent.clientY
+
+####onmousemove	鼠标移动事件
+
+####应用：鼠标跟随
+
+div跟着鼠标走 ？
+注意点：最好x轴加上滚动的宽度
+	    y轴加上滚动的高度
+
+var x = oEvent.clientX - oDiv.offsetWidth/2;
+var y = oEvent.clientY - oDiv.offsetHeight/2;
+var scrollT = document.documentElement.scrollTop || document.body.scrollTop;
+var scrollL = document.documentElement.scrollLeft || document.body.scrollLeft;
+
+var maxW = document.documentElement.clientWidth - oDiv.offsetWidth + scrollL;
+var maxH = document.documentElement.clientHeight - oDiv.offsetHeight + scrollT;
+x < 0 && (x = 0);
+y < 0 && (y = 0);
+x > maxW && (x = maxW);
+y > maxH && (y = maxH);
+
+oDiv.style.left = x + 'px';
+oDiv.style.top = y + 'px';
+
+####应用：放大镜
+
+###事件冒泡
+####子级的事件会传递给父级，如果父级有相同的事件，会依次从内到外执行，直到相同事件的祖宗节点，否则会继续冒泡。
+####阻止事件冒泡(获取事件更加详细的信息)：在子级事件内添加 oEvent.cancelBubble = true;
+
+##11.25
+
+###键盘事件
+####document.onkeydown  按下键盘触发
+
+####oEvent.keyCode      获得按下键的键码
+####					0~9:48~57 	a~z: 65~90
+####					ctrl：17 delete: 46	backspace: 8	enter: 13
+####					左键：37  上键：38  右键：39  下键：40
+
+####组合键
+####在js里键码不能组合使用
+####ctrl -> ctrlKey
+####shift -> shiftKey
+####alt -> altKey
+
+eg:if(oEvent.ctrlKey && oEvent.shiftKey && oEvent.keyCode == 65){...}
+
+###默认行为：
+####右键有菜单 表单能提交 文本框能输入内容 点击a标签能跳转
+
+###鼠标事件
+####oncontextmenu 点击鼠标右键触发(有默认右键菜单行为)
+####				阻止默认行为：return false;
+
+####应用：自定义右键菜单
+####应用：自定义输入框
+
+####window.location.reload  刷新页面
+
+###拖拽
+####1.按下鼠标 2.移动 3.释放鼠标
+####onmousedown	按下鼠标时触发
+####onmouseup	抬起鼠标时触发
+####问题：1.速度加快超出框时会掉
+####			解决：oDiv.onmousemove -> document.onmousedown
+####			      oDiv.onmouseup   -> document.onmouseup
+####	  2.默认行为：移上其他框时会选中文本
+####			解决：return false;
+####应用：1.拖拽 2.拖拽(带框) 3.磁性吸附
+
+###捕获(IE独有)
+####设置捕获：obj.setCapture();
+####释放捕获：obj.releaseCapture();
+
+####if(A){B;} 简写 A && B;
+
+###克隆
+####浅克隆：obj.cloneNode();	  只克隆obj一个
+####深克隆：obj.cloneNode(true);  克隆obj包括obj的子级
+
+###事件绑定
+####可以解决事件的冲突
+####obj.addEventListener(事件名, 函数名/函数, 是否捕获);
+####					事件名->不能加'on'
+####					函数名->不能加括号
+####					是否捕获->false
+####		兼容：高级浏览器
+
+####obj.attachEvent(事件名, 函数名/函数);
+####					事件名->必须加'on'
+####					函数名->不能加括号
+####		兼容：IE10-
+
+###捕获
+####事件冒泡：子级->父级
+####是否捕获(事件下沉)：
+####				true：父级->子级
+####				false：没有用
+
+####兼容写法：
+if(obj.addEventListner) {	//高级浏览器 -> function  IE10- ->undefined
+	//高级浏览器
+	obj.addEventListener('click', show, false);
+} else {
+	//IE10-
+	obj.attachEvent('onclick', show);
+}
+
+####封装一个事件绑定的函数
+function addEvent(obj, sEv, fn) {	//对象, 事件(不加on), 函数名/函数
+	if(obj.addEventListner) {	//高级浏览器 -> function  低级 ->undefined
+		//高级浏览器
+		obj.addEventListener(sEv, fn, false);
+	} else {
+		//低级
+		obj.attachEvent('on' + sEv, fn);
+	}
+}
+
+
+##11.28
+
+###事件解绑
+
+####obj.removeEventListener(事件名, 函数名/函数, 是否捕获);
+####			注意：函数不能是匿名函数，每个匿名函数都相当于新创建了一个函数
+####            创建函数 var show = new Function('a','b', 'alert(a + b)');
+####		兼容：高级浏览器
+
+####obj.detachEvent(事件名, 函数名/函数);
+####		兼容：IE10-
+
+####封装一个事件解绑的函数
+function removeEvent(obj, sEv, fn) {	//对象, 事件(不加on), 函数名/函数
+	if(obj.removeEventListner) {	//高级浏览器 -> function  低级 ->undefined
+		//高级浏览器
+		obj.removeEventListener(sEv, fn, false);
+	} else {
+		//低级
+		obj.detachEvent('on' + sEv, fn);
+	}
+}
+
+###this问题
+####1.定时器中的this不指向元素，指向window
+####	解决：在定时器外保存this
+oBtn.onclick = function() {
+	var _this = this;
+	setTimeout(function(){
+		_this.style.background = '#f00';
+	},1000);
+}
+####2.调用封装函数使用this，this不指向元素，指向window
+####3.(低级浏览器attachEvent)事件绑定里面的this 报错
+
+
+###未整理 !important
+
+###应用：拖拽让div变大，九宫格拖拽，碰撞检测，自定义滚动条
+
+####九宫格拖拽
+// 多个方向拖拽
+function dragMore(obj1, obj2) {
+	obj1.onmousedown = function(ev) {
+		...
+		document.onmousemove = function(ev) {
+			var oEvent = ev || event;
+			var moveX = oEvent.clientX;
+			var moveY = oEvent.clientY;
+			if(obj1.className.indexOf('r') != -1) {
+				var targetX = moveX - downX;
+				obj2.style.width = oldW + targetX + 'px';
+			}
+			if(obj1.className.indexOf('b') != -1) {
+				var targetY = moveY - downY;
+				obj2.style.height = oldH + targetY + 'px';
+			}
+			if(obj1.className.indexOf('t') != -1) {
+				var targetY = downY - moveY;
+				obj2.style.top = offT - targetY + 'px';
+				obj2.style.height = oldH + targetY + 'px';
+			}
+			if(obj1.className.indexOf('l') != -1) {
+				var targetX = downX - moveX;
+				obj2.style.left = offL - targetX + 'px';
+				obj2.style.width = oldW + targetX + 'px';
+			}
+		}
+		document.onmouseup = function() {
+			...
+		}
+		oEvent.cancelBubble = true;
+		return false;
+	}
+}
+####碰撞检测：
+function collTest(obj1, obj2) {
+	var l1 = obj1.offsetLeft;
+	var r1 = obj1.offsetLeft + obj1.offsetWidth;
+	var t1 = obj1.offsetTop;
+	var b1 = obj1.offsetTop + obj1.offsetHeight;
+	var l2 = obj2.offsetLeft;
+	var r2 = obj2.offsetLeft + obj2.offsetWidth;
+	var t2 = obj2.offsetTop;
+	var b2 = obj2.offsetTop + obj2.offsetHeight;
+
+	if(l1 > r2 || r1 < l2 || t1 > b2 || b1 < t2) {
+		// no collision
+		return false;
+	} else {
+		// collision
+		return true;
+	}
+}
+
+####封装drag(obj), dragMore(obj1, obj2), collTest(obj)
+
+####position:relative 会相对于浏览器8px margin定位
+####position:absolute 不会相对于浏览器8px margin定位
+
+###透明度兼容
+####opacity: .2;
+####filter: alpha(opacity( .2));
+
+###鼠标滚轮事件
+####obj.onmousewheel  滚动鼠标滚轮触发
+####	兼容：Chrome IE系
+####DOMMouseScroll	  DOM事件（只能通过事件绑定添加）
+####	兼容：FF
+document.addEventListener('DOMMouseScroll', function() {
+	//scroll code here
+}, false)
+#### 兼容写法：
+
+if(window.navigator.userAgent.indexOf('FireFox') != -1) {
+	//FF
+	document.addEventListener('DOMMouseScroll', function() {
+		//scroll code here
+	}, false)
+} else {
+	//Chrome IE系
+	document.onmousewheel = function() {
+		//scroll code here
+	}
+}
+
+####判断滚动方向
+####	Chrome、IE系
+####	oEvent.wheelDelta
+####		向上：120
+####		向下：-120
+####	FF
+####	DOMMouseScroll
+####	oEvent.detail
+####		向上：-3
+####		向下：3
+####兼容写法
+
+####封装一个
+
+function addWheel(obj, fn) {	//向上fn(true)，向下fn(false)
+
+	function wheel(ev) {
+		var oEvent = ev || event;
+		var bDown = false;				//默认向下
+		if(oEvent.wheelDelta) {			//FF -> undefined
+			//Chrome IE系
+			//
+			if(oEvent.wheelDelta > 0) {
+				//向上
+				bDown = true;
+			} else {
+				//向下
+				bDown = false;
+			}
+		} else {
+			//FF
+			//
+			if(oEvent.detail < 0) {
+				//向上
+				bDown = true;
+			} else {
+				//向下
+				bDown = false;
+			}
+		}
+
+		//判断是否传入函数，执行回调函数
+		fn && fn(bDown);
+	}
+
+	if(window.navigator.userAgent.indexOf('FireFox') != -1) {
+		//FF
+		document.addEventListener('DOMMouseScroll', wheel, false)
+	} else {
+		//Chrome IE系
+		document.onmousewheel = wheel;
+	}
+}
+
+
+##11.29
+
+####封装一个鼠标滚动方向的函数
+function addWheel(obj, fn) {	//向上fn(false)，向下fn(true)
+	function wheel(ev) {
+		var oEvent = ev || event;
+		<!-- var bDown = true;				//默认向下 -->
+		<!-- if(oEvent.wheelDelta) {			//FF -> undefined
+			//Chrome IE系
+			bDown = oEvent.wheelDelta < 0;
+		} else {
+			//FF
+			bDown = oEvent.detail > 0;
+		} -->
+
+		var bDown = oEvent.wheelDelta ? oEvent.wheelDelta < 0 : oEvent.detail > 0;
+
+		//判断是否传入函数，执行回调函数
+		fn && fn(bDown);
+
+		//FF阻止默认
+		oEvent.preventDefault && oEvent.preventDefault();
+
+		//阻止默认
+		return false;
+	}
+
+	if(window.navigator.userAgent.indexOf('FireFox') != -1) {
+		//FF
+		document.addEventListener('DOMMouseScroll', wheel, false);	//事件中阻止默认没有用
+	} else {
+		//Chrome IE系
+		<!-- document.onmousewheel = wheel; -->
+		addEvent(obj, 'mousewheel', wheel);
+	}
+}
+
+
+####oEvent.preventDefault();
+####	兼容：高级浏览器
+####	IE8- -> undefined
+
+
+###未整理
+###应用：实时统计字数
+####onkeydown	问题：本次事件触发时获取的value是上次onkeydown事件获取的value
+####onkeyup		问题：键盘不抬起就不获取value
+####oninput	 			键盘输入时实时触发
+####		 			兼容：高级浏览器 IE9删除时有问题
+####onpropertychange	键盘输入时实时触发
+####		 			兼容：IE10-	  IE9删除时有问题
+
+####事件的兼容不需要处理，直接连等
+
+####obj.oninput = obj.onpropertychange = function() {}
+
+####处理IE9：定时器
+
+####封装一个实时统计字数的函数
+function calLen(obj1, obj2) {
+	if(window.navigator.userAgent.indexOf('MSIE 9.0') != -1) {	//IE9
+		var timer = null;
+		obj1.onfocus = function() {
+			timer = setInterval(function() {
+				obj2.innerHTML = obj1.value.length;
+			},50);
+		};
+		obj1.onblur = function() {
+			clearInterval(timer);
+		}
+	} else {		//能不添加定时器时就不添加
+		obj1.oninput = obj1.onpropertychange = function() {		//高级浏览器、IE10-
+			obj2.innerHTML = obj1.value.length;
+		}
+	}
+}
+
+###window.onload 当页面加载完成时触发(在DOM后)  html css js 图片 flash ...
+
+###domReady:
+####DOMContentLoaded 当DOM加载完成时触发(在页面前) DOM事件，必须通过事件绑定添加
+####				 兼容：高级浏览器
+
+####模拟domReady
+####监控资源加载的情况:
+document.onreadystatechange = function() {	//事件名都是全小写
+	if(document.readyState == 'complete') {	//全兼容
+		//code here
+	}
+}
+
+####兼容写法：
+####封装domReady全兼容方法
+function domReady(fn) {
+	if(document.addEventListener) {
+		//高级浏览器
+		document.addEventListener('DOMContentLoaded', function() {
+			fn && fn();
+		}, false);
+	} else {
+		//低级浏览器  模拟domReady
+		document.onreadystatechange = function() {
+			if(document.readyState == 'complete') {
+				fn && fn();
+			}
+		}
+	}
+}
+
+###事件委托
+####子级身上的事件可以委托给父级
+####好处：(1)提高性能 (2)可以给未来的子元素添加事件
+
+####事件源
+####oEvent.target
+####	兼容：高级浏览器
+####	低级浏览器 -> undefined
+####oEvent.srcElement
+####	兼容：Chrome、IE系
+####FF -> undefined
+
+####兼容写法：var oSrc = oEvent.srcElement || oEvent.target;
+####获取标签名：oSrc.tagName;	(都是大写)
+
+####给子级循环添加事件的替代写法
+oUl.onclick  = function(ev) {
+	var oEvent = ev || event;
+	var oSrc = oEvent.scrElement || oEvent.target;
+	if(oSrc.tagName == 'LI') {
+		this.style.background = '#f00';
+	}
+}
+
+####offsetWidth/height只有append进body后才有，创建时获取不到盒模型的大小
+
+###onmouseover、onmouseout
+####问题：移入子级也算重新移入
+####解决：onmouseover -> onmouseenter
+####问题：移出子级也算移出
+####解决：onmouseout -> onmouseleave
+
+###定时器的问题
+####1.时间不能设置太小的值 eg:设置0其实会超出0
+var a = 6;
+setTimeout(function(){
+	a = 66;
+},0);
+alert(a);	//6
+####2.时间值越小越不稳定
+####3.打开其他窗口时，该窗口定时器时间会变长
+####定时器的最佳时间：30ms (时间过小，程序性能开销大) !important
+
+####offsetWidth问题：是盒模型大小，包括边框，内边距和宽度。
+
+###运动
+####封装
+function getStyle(obj, name) {
+	return (obj.currentStyle || getComputedStyle(obj, false))[name];
+}
+
+function move(obj, iTarget, name, duration) {
+	clearInterval(obj.timer);
+	var start = parseFloat(getStyle(obj, name));
+	var dis = iTarget - start;
+	var count = Math.floor(duration / 30);		//30ms 最佳定时器时间
+	var n = 0;
+	obj.timer = setInterval(function() {		//自定义属性加定时器
+		n++;
+		obj.style[name] = start + n *  dis / count + 'px';
+		n == count && clearInterval(obj.timer);
+	}, 30);
+}
+
+###链式运动
+function move(obj, iTarget, name, duration, complete) {
+	clearInterval(obj.timer);
+	var start = parseFloat(getStyle(obj, name));
+	var dis = iTarget - start;
+	var count = Math.floor(duration / 30);		//30ms 最佳定时器时间
+	var n = 0;
+	obj.timer = setInterval(function() {		//自定义属性加定时器
+		n++;
+		obj.style[name] = start + n *  dis / count + 'px';
+		if( n == count) {
+			clearInterval(obj.timer);
+			complete && complete();
+		}
+	}, 30);
+}
+
+###多个属性同时运动
+function move(obj, json, duration, complete) {
+	clearInterval(obj.timer);
+	var start = {};		//起点
+	var dis = {};		//总距离
+	//
+	for(var name in json) {
+		start[name] = parseFloat(getStyle(obj, name));
+		dis[name] = json[name] - start[name];
+	}
+	//
+	var count = Math.floor(duration / 30);		//30ms 最佳定时器时间
+	var n = 0;
+	obj.timer = setInterval(function() {		//自定义属性加定时器
+		n++;
+		for(var name in json) {
+			obj.style[name] = start[name] + n * dis[name] / count + 'px';
+		}
+		if( n == count) {
+			clearInterval(obj.timer);
+			complete && complete();
+		}
+	}, 30);
+}
+
+
+
