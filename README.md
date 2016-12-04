@@ -1301,8 +1301,6 @@ function addWheel(obj, fn) {	//向上fn(false)，向下fn(true)
 ####	兼容：高级浏览器
 ####	IE8- -> undefined
 
-
-###未整理
 ###应用：实时统计字数
 ####onkeydown	问题：本次事件触发时获取的value是上次onkeydown事件获取的value
 ####onkeyup		问题：键盘不抬起就不获取value
@@ -1475,4 +1473,324 @@ function move(obj, json, duration, complete) {
 }
 
 
+##11.30
+
+###运动
+####总距离	var dis = iTarget - start;
+####总次数	Math.floor(duration / 30);
+
+###多个属性同时运动
+function move(obj, json, duration, complete) {	//运动物体，改变的属性及终态，总时间，链式运动的回调
+	clearInterval(obj.timer);
+	var start = {};		//起点
+	var dis = {};		//总距离
+	//
+	for(var name in json) {
+		start[name] = parseFloat(getStyle(obj, name));	//字符串转数字，并保留小数
+		dis[name] = json[name] - start[name];
+	}
+	//
+	var count = Math.floor(duration / 30);		//总次数，30ms 最佳定时器时间
+	var n = 0;
+	obj.timer = setInterval(function() {		//自定义属性加定时器
+		n++;
+		for(var name in json) {
+			var cur = start[name] + n * dis[name]/count;
+			if(name == 'opacity') {
+				obj.style.opacity = cur;
+				obj.style.filter = 'alpha(opacity:' + cur * 100 + ')';
+			} else {
+				obj.style[name] = cur + 'px';
+			}
+		}
+		if( n == count) {
+			clearInterval(obj.timer);
+			complete && complete();
+		}
+	}, 30);
+}
+
+####运动形式：加速、匀速、减速
+####匀速：linear
+####	  var a = n / count;
+####	  var cur = start[name] + dis[name] * a;
+####加速：ease-in
+####	  var a = n / count;
+####	  var cur = start[name] + dis[name] * Math.pow(a, 3);
+####减速：ease-out
+####	  var a = 1 - n / count;
+####	  var cur = start[name] + dis[name] * (1 - Math.pow(a, 3));
+
+function move(obj, json, duration, easing, complete) {	//运动物体，改变的属性及终态，总时间，运动形式，链式运动的回调
+	clearInterval(obj.timer);
+	var start = {};		//起点
+	var dis = {};		//总距离
+	//
+	for(var name in json) {
+		start[name] = parseFloat(getStyle(obj, name));	//字符串转数字，并保留小数
+		dis[name] = json[name] - start[name];
+	}
+	//
+	var count = Math.floor(duration / 30);		//总次数，30ms 最佳定时器时间
+	var n = 0;
+	obj.timer = setInterval(function() {		//自定义属性加定时器
+		n++;
+		for(var name in json) {
+			switch(easing) {
+				case 'linear':
+					var a = n / count;
+					var cur = start[name] + dis[name] * a;
+					break;
+				case 'ease-in':
+					var a = n / count;
+					var cur = start[name] + dis[name] * Math.pow(a, 3);
+					break;
+				case 'ease-out':
+					var a = 1 - n / count;
+					var cur = start[name] + dis[name] * (1 - Math.pow(a, 3));
+					break;
+			}
+			if(name == 'opacity') {
+				obj.style.opacity = cur;
+				obj.style.filter = 'alpha(opacity:' + cur * 100 + ')';
+			} else {
+				obj.style[name] = cur + 'px';
+			}
+		}
+		if( n == count) {
+			clearInterval(obj.timer);
+			complete && complete();
+		}
+	}, 30);
+}
+
+###封装：1.	2.
+function move(obj, json, options) {
+	//运动物体，改变的属性及终态，(总时间，运动形式，链式运动的回调)
+	options = options || {};
+	options.duration = options.duration || 700;		//默认总时间可自定义
+	options.easing = options.easing || 'ease-out';	//默认运动形式可自定义
+	clearInterval(obj.timer);
+	var start = {};		//起点
+	var dis = {};		//总距离
+	//
+	for(var name in json) {
+		start[name] = parseFloat(getStyle(obj, name));	//字符串转数字，并保留小数
+		dis[name] = json[name] - start[name];
+	}
+	//
+	var count = Math.floor(options.duration / 30);	//总次数，30ms 最佳定时器时间
+	var n = 0;
+	obj.timer = setInterval(function() {		//自定义属性添加定时器
+		n++;
+		for(var name in json) {
+			switch(options.easing) {
+				case 'linear':
+					var a = n / count;
+					var cur = start[name] + dis[name] * a;
+					break;
+				case 'ease-in':
+					var a = n / count;
+					var cur = start[name] + dis[name] * Math.pow(a, 3);	//a的3次方，加速曲线可自定义
+					break;
+				case 'ease-out':
+					var a = 1 - n / count;
+					var cur = start[name] + dis[name] * (1 - Math.pow(a, 3));	//加速曲线可自定义
+					break;
+			}
+			if(name == 'opacity') {
+				obj.style.opacity = cur;
+				obj.style.filter = 'alpha(opacity:' + cur * 100 + ')';
+			} else {
+				obj.style[name] = cur + 'px';
+			}
+		}
+		if( n == count) {
+			clearInterval(obj.timer);
+			options.complete && options.complete();
+		}
+	}, 30);
+}
+
+###应用：jiaThis分享到
+
+###应用：幻灯片、手风琴
+
+###应用：多图片展开(图片中心放大)
+####浮动布局 -> 定位布局
+####取每个li的offsetLeft和offsetTop赋给绝对定位时的left和top
+
+###应用：运动时钟、输入框数字运动
+
+###应用：返回顶部
+
+###应用：无缝滚动
+####ul里的内容复制一份，再计算ul宽度
+####方法1.宽度运动到一半时拉回
+####方法2.模%求得余数
+####		往左走(left负数)
+####		W = oUl.offsetWidth / 2;
+####		left -= 5;
+####		left = left % W;
+####		往右走(left正数)
+####		W = oUl.offsetWidht / 2;
+####		left += 5;
+####		left = (left % W - W) % W;
+
+##12.1
+
+###应用：无缝幻灯片
+####		往左走(left负数)
+####		W = oUl.offsetWidth / 2;
+####		left -= 5;
+####		left = left % W;
+####		往右走(left正数)
+####		W = oUl.offsetWidht / 2;
+####		left += 5;
+####		left = (left % W - W) % W;
+
+for(var i = 0; i < aBtn.length; i++) {
+	aBtn[i].index = i;
+	aBtn[i].onmouseover = function() {
+		iNow = Math.floor(iNow/aBtn.length)*aBtn.length+this.index;
+		tab();
+	}
+}
+
+function tab() {
+	for(var i = 0; i < aBtn.length; i++) {
+		aBtn[i].className = '';
+	}
+    aBtn[(iNow%aBtn.length+aBtn.length)%aBtn.length].className = 'active';
+	toR(oUl, - aLi[0].offsetWidth * iNow);
+}
+
+var timer2 = null;
+carousel();
+function carousel() {
+	clearInterval(timer2);
+	timer2 = setInterval(function() {
+		iNow++;
+		tab();
+	}, 3000);
+}
+
+var iW = oUl.offsetWidth / 2;
+var timer = null;
+var left = 0;
+function toR(obj, iTarget) {
+	clearInterval(timer);
+	var start = left;
+	var dis = iTarget - start;
+	var count = Math.floor(1000 / 30);
+	var n = 0;
+	timer = setInterval(function() {
+		n++;
+		var a = n / count;
+		var cur = start + dis * a;
+		left = cur;
+		oUl.style.left = (left % iW - iW) % iW + 'px';
+		if(n == count) {
+			clearInterval(timer);
+		}
+	}, 30);
+}
+###应用：递归调用
+function cont() {
+	iNow++;
+	if(iNow == aPos.length) {
+		iNow = 0;
+	}
+	move(oDiv, aPos[iNow], {
+		complete:cont	//递归调用
+	});
+}
+###应用：带进度条的无缝幻灯片
+function next() {
+	move(aSpan[iNow % aSpan.length], {width: 40}, {easing: 'ease-out',complete: function(){
+		iNow++;
+		for(var i = 0; i < aSpan.length; i++) {
+			aSpan[i].style.width = 0;
+		}
+		move2(oUl, -iNow * aLi[0].offsetWidth, function() {
+			!bSin && next();
+		});
+	}});
+}
+
+var iW = oUl.offsetWidth / 2;
+var left = 0;
+var timer = null;
+function move2(obj, iTarget, complete) {
+	clearInterval(timer);
+	var start = left;
+	var dis = iTarget - start;
+	var count = Math.floor(1000 / 30);
+	var n = 0;
+	timer = setInterval(function() {
+		n++;
+		var a = n / count;
+		var cur = start + dis * a;
+		left = cur;
+		obj.style.left = (left % iW - iW) % iW + 'px';
+		if(n == count) {
+			clearInterval(timer);
+			complete && complete();
+		}
+	}, 30);
+}
+
+###分布运动
+####应用：打字依次弹出效果
+
+###应用：下一页依次收起再放出效果
+
+##12.2
+
+###分块运动
+
+####1.自定义行数R、列数C
+####2.创建span
+####  计算oSpan的width、height、left、top、background-position
+####  注意：先appendChild才能获取oSpan的offsetWidth和offsetHeight
+
+for(var r = 0; r < R; r++) {
+	for(var c = 0; c < C; c++) {
+		var oSpan = document.createElement('span');
+		oSpan.style.width = oBox.offsetWidth / C + 'px';
+		oSpan.style.height = oBox.offsetHeight / R + 'px';
+		oBox.appendChild(oSpan);
+		oSpan.style.left = oSpan.offsetWidth * c + 'px';
+		oSpan.style.top = oSpan.offsetHeight * r + 'px';
+		oSpan.style.backgroundPosition = - oSpan.offsetWidth * c + 'px ' + (-oSpan.offsetHeight * r) + 'px';
+		oSpan.r = r;
+		oSpan.c = c;
+	}
+}
+
+
+####3.分布运动，依次显示span
+
+
+####优化：setInterval可用for循环+setTimeout替代，可设置行列相关时同一时间出现
+####应用：分块出现，卷帘出现，斜角出现
+
+###应用：感应变大
+####感应距离：一般为500
+####比例：scale = 1 - c/500;
+document.onmousemove = function(ev) {
+	var oEvent = ev || event;
+	for(var i = 0; i < aImg.length; i++) {
+		// 勾股定理计算鼠标至图片中心距离
+		var a = getPos(aImg[i]).left + aImg[i].offsetWidth / 2 - oEvent.clientX;
+		var b = getPos(aImg[i]).top + aImg[i].offsetHeight / 2 - oEvent.clientY;
+		var c = Math.sqrt(a * a + b * b);
+		//计算方放大比例，范围为[0.5, 1]
+		var scale = 1 - c / 500;
+		scale < 0.5 && (scale = 0.5);
+		aImg[i].style.width = scale * 80 + 'px';
+	}
+}
+
+###应用：拖拽变大
 
