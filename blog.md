@@ -843,10 +843,8 @@ GB2312：中文占2个字节
 </script>
 ```
 严格模式
-在script标签内最上面写 'use strict'; **IE6不识别但不报错**
-好处：1.定义变量不带var报错  2.不允许在if while for里面定义函数
-作用域：(1)当前script标签内 (2)函数  (3)js文件
 
+在script标签内最上面写 'use strict'; **IE6不识别但不报错**
 
 'use strict';	IE6不识别但不报错
 好处：
@@ -855,9 +853,8 @@ GB2312：中文占2个字节
 3. 去掉了with(){}
 4. 定义变量必须加var
 
-作用范围：
-1. 最大不出script标签
-2. 放在哪就作用在哪
+作用域：(1)当前script标签内 (2)函数  (3)js文件
+
 
 坑
 ``` javascript
@@ -919,7 +916,34 @@ GB2312：中文占2个字节
 </script>
 ```
 
+##7. 文本提示框
+聚焦事件：oT.onfocus = function() {};
+失焦事件：oT.onblur = function() {};
+> 强制获取一个焦点：oT.focus();
+> 强制失去一个焦点：oT.blur();
 
+##8. form表单
+想要提交数据须有
+1. action 提交的地址 <form action=''></form>
+2. name   数据名称   <input name="user.tel" />
+3. value  数据       input.value
+
+提交方式
+1. get(默认) 容量32K左右  不安全，有缓存
+> 好处：(1)分享 (2)收藏
+
+2. post      容量1G左右   相对安全，没有缓存
+
+> 缓存(cache)
+对于浏览器而言，相同的地址只会访问一次
+
+##9. 事件对象
+- event  事件对象(系统自带)  兼容：Chrome IE系
+						    FF -> 报错
+- ev     事件函数传入参数    兼容：高级浏览器(Chrome、FF、IE9+)
+						    IE8- -> undefined
+
+兼容写法：var oEvent = ev || event;
 
 
 ---
@@ -1143,7 +1167,7 @@ eg: window.navigator.userAgent
 	(1) 父节点.lastElementChild || 父节点.lastChild
 	(2) 父节点.children[父节点.children.length - 1]
 
-##3. DOM操作
+##3. DOM节点操作
 1. 创建一个节点
 	var obj = document.createElement('tagName');
 2. 添加一个节点
@@ -1154,7 +1178,17 @@ eg: window.navigator.userAgent
 4. 替换一个节点
 	父节点.replaceChild(新节点, 删除的节点);
 
-##4. BOM
+##4. DOM属性操作
+1. .
+2. []
+3. 可操作自定义属性
+- 获取属性 obj.getAttribute(属性的名字);
+- 设置属性 obj.setAttribute(属性的名字, 值);
+- 删除属性 obj.removeAttribute(属性的名字);
+
+> 获取设置属性方法尽量不混用
+
+##5. BOM
 1. window.open(地址, 方式);	 打开新窗口
 	返回值：新的窗体对象
 		Chrome：拦截
@@ -1196,7 +1230,7 @@ eg: window.navigator.userAgent
 ---
 #blog8(各种宽高，距离)
 ---
-##1. 滚动高度
+##1. 滚动距离
 **html简写：document.documentElement**
 - document.body.scrollTop
 	兼容：Chrome
@@ -1209,14 +1243,53 @@ eg: window.navigator.userAgent
 纵向：var scrollT = document.documentElement.scrollTop || document.body.scrollTop;
 横向：var scrollL = document.documentElement.scrollLeft || document.body.scrollLeft;
 
-##2. 可视区高度
+##2. 滚动高度
+obj.scrollHeight
+- 内容高度 > 盒模型高度    取内容高度
+- 盒模型高度 > 内容高度    去盒模型高度
+
+##3. 可视区高度
 - 可视区高度：var clientH = document.documentElement.clientHeight;
 - 可视区宽度：var clientW = document.documentElement.clientWidth;
 
 兼容：全兼容
 
-##3. 物体高度
+##4. 物体高度
 - 物体的高度：var oH = obj.offsetHeight;
 - 物体的宽度：var oW = obj.offsetWidth;
 
-##4. 
+##5. offsetHeight && getStyle()
+
+| 	   	| 		offsetHeight      |     getStyle() 	 		 |
+| :--: 	| 	   :----: 	          |   :----: 	 		     |
+|返回值 | 	   数字  	  		  |   		字符串 		     |
+|获取值 | 获取的是盒模型的大小(width/height+padding+border)  |   获取的是纯width/height			 |
+| display:none后   | 	   0    |   仍可以获取 				 |
+
+##6. 物体的相对距离
+- 物体距离定位父级左边距离：var oL = obj.offsetLeft;
+- 物体距离定位父级上边距离：var oT = obj.offsetTop;
+
+##7. 关于父级
+- 结构父级 obj.parentNode    根：document
+- 定位父级 obj.offsetParent  根：body
+
+##8. 封装一个物体距离左边/上边的绝对位置的函数
+``` javascript
+<script>
+	function getPos(obj) {
+		var l = 0;	// 距离左边的绝对距离
+		var t = 0;	// 距离上边的绝对距离
+		while(obj) {
+			l += obj.offsetLeft;
+			t += obj.offsetTop;
+			obj = obj.offsetParent;	// 继续查找上一层定位父级
+		}
+
+		return {left: l, top: t};
+	}
+</script>
+
+```
+
+
