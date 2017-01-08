@@ -1,6 +1,6 @@
 ---
 #blog1
-以下内容若有问题烦请即时告知我以修改，以免误导更多人。
+以下内容若有问题烦请即时告知我予以修改，以免误导更多人。
 
 ---
 
@@ -252,7 +252,7 @@ obj.getElementsByClassName
 
 >应用：随机变色
 
->>``` javascript
+>``` javascript
 <script>
 	// rgb色值范围[0, 255]
 	oDiv.style.background = 'rgb(' + rnd(0, 256) + ',' + rnd(0, 256) + ',' + rnd(0, 256) + ')';
@@ -993,6 +993,8 @@ eg:
 4. 循环pop或shift
 
 ###数组排序方法
+更多方法见后续排序算法篇
+
 ``` javascript
 <script>
 	function findMinIndex(arr, start) {
@@ -1101,6 +1103,26 @@ eg:
 	}
 </script>
 ```
+
+5. 二分法
+
+``` javascript
+<script>
+
+
+	// 数组内查找元素是否存在
+	function findInArr(item, arr) {
+		for(var i = 0; i < arr.length; i++) {
+			if(item == arr[i]) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+</script>
+```
+
 
 ---
 #blog7(js组成)
