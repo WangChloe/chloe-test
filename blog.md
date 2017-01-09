@@ -1108,18 +1108,39 @@ eg:
 
 ``` javascript
 <script>
-
+	var arr = [1, 2, 3, 2, 4, 3, 1, 5, 7, 2, 5];
 
 	// 数组内查找元素是否存在
 	function findInArr(item, arr) {
 		for(var i = 0; i < arr.length; i++) {
 			if(item == arr[i]) {
 				return true;
-			} else {
-				return false;
 			}
 		}
+        return false;
 	}
+
+	function del(arr, s, e) {
+		if(s > e) {
+			return [];
+		} else if(s == e) {
+			return [arr[s]];
+		}
+
+		var c = Math.floor((s + e) / 2);
+		var l = del(arr, s, c);
+		var r = del(arr, c + 1, e);
+
+		for(var i = 0; i < r.length; i++) {
+			if(!findInArr(r[i], l)) {
+				l.push(r[i]);
+			}
+		}
+
+		return l;
+	}
+
+	console.log(del(arr, 0 , arr.length - 1));
 </script>
 ```
 
