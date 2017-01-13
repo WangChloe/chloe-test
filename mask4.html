@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			background-color: black;
+		}
+
+		#box{
+			width: 300px;
+			height: 200px;
+			background-size: cover;
+			background-image:url(statics/ali.jpg);
+			margin: 40px auto;
+			-webkit-mask:-webkit-radial-gradient(20px 50px,circle,red 30px,rgba(0,0,0,0) 40px);
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		var oBox = document.querySelector('#box');
+
+		oBox.onmousemove = function({
+				clientX,
+				clientY
+			}){
+
+			this.style.WebkitMask = `-webkit-radial-gradient(${
+				clientX - oBox.offsetLeft
+			}px ${
+				clientY - oBox.offsetTop
+			}px,circle,red 30px,rgba(0,0,0,0) 40px)`
+
+		}
+	</script>
+</body>
+</html>

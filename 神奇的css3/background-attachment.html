@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图片切换效果</title>
+	<style>
+		html{
+			height: 100%;
+		}
+
+		body{
+			margin: 0;
+			height: 100%;
+		}
+
+		section{
+			height: 100%;
+			background-attachment: fixed;
+			background-size: 400px;
+			background-position: center;
+			background-repeat: no-repeat;
+			border-bottom: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<section></section>
+	<section></section>
+	<section></section>
+	<section></section>
+	<section></section>
+	<section></section>
+	<script>
+		var aSec = document.querySelectorAll('section');
+
+		aSec.forEach(function(oSec,index){
+			oSec.style.backgroundImage = 'url(img/'+(index+1)+'.jpg)';
+		})
+	</script>
+</body>
+</html>
