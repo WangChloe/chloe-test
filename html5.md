@@ -8,6 +8,11 @@
 6. 省略行内属性赋值的引号
 
 ## 1. 新增元素
+
+![H5标签集合](http://ojvx9eehr.bkt.clouddn.com/H5%E6%A0%87%E7%AD%BE%E9%9B%86%E5%90%88.jpg)
+
+![H5页面常用结构](http://ojvx9eehr.bkt.clouddn.com/H5%E9%A1%B5%E9%9D%A2%E5%B8%B8%E7%94%A8%E7%BB%93%E6%9E%84.gif)
+
 ### 结构元素
 #### section
 对网站内容分块、分段
