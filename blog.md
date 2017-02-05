@@ -1751,7 +1751,1461 @@ var oSrc = oEvent.srcElement || oEvent.target;
 ```
 
 ---
-#blog10(原生编写运动框架)
+#blog10(原生运动框架)
 ---
 
-##move.js
+## move.js
+
+``` javascript
+<script>
+
+	function move(obj, json, options) {
+
+		// 运动物体，{改变的属性及终态}，{总时间，运动形式，链式运动的回调}
+
+		options = options || {};
+		options.duration = options.duration || 700;  // 默认总时间 [可自定义]
+		options.easing = options.easing || 'linear';  // 默认运动形式 [可自定义]
+
+		clearInterval(obj.timer);
+
+		var start = {};  // 起点
+		var dis = {};  // 总距离
+
+		for(var name in json) {
+			start[name] = parseFloat(getStyle(obj, name));  // 字符串转数字，并保留小数(透明度)
+			dis[name] = json[name] - start[name];
+		}
+
+		var count = Math.floor(options.duration / 30);  // 总次数 30ms 最佳定时器时间
+		var n = 0;
+		obj.timer = setInterval(function(){  // 自定义属性加定时器
+			n++;
+			for(var name in json) {
+				switch(options.easing) {  // 自定义运动形式
+					case 'linear':
+						var a = n / count;
+						var cur = start[name] + dis[name] * a;  // 匀速
+						break;
+					case 'ease-in':
+						var a = n / count;
+						var cur = start[name] + dis[name] * Math.pow(a, 3);  // 加速 a的3次方 [可自定义]
+						break;
+					case 'ease-out':
+						var a = 1 - n / count;
+						var cur = start[name] + dis[name] * (1 - Math.pow(a, 3));  // 减速 [可自定义]
+						break;
+				}
+
+				if(name == 'opacity') {  // 若改变属性为透明度时另作处理
+					obj.style.opacity = cur;
+					obj.style.filter = 'Alpha(opacity:' + cur * 100 + ')';
+				} else {
+					obj.style[name] = cur + 'px';
+				}
+			}
+
+			if( n == count) {
+				clearInterval(obj.timer);
+				options.complete && options.complete();  // 链式运动
+			}
+		}, 30);  // 30ms 最佳定时器时间
+	}
+
+	function getStyle(obj, name) {
+		return (obj.currentStyle || getComputedStyle(obj, false))[name];
+	}
+
+
+</script>
+```
+
+---
+#blog11(move框架应用) (上)
+---
+
+## 1. 仿jiaThis分享到
+
+[JiaThis - 社会化分享按钮及移动端分享代码提供商！](http://www.jiathis.com/)
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		overflow: hidden;
+	}
+	#box {
+		position: absolute;
+		right: -140px;
+		top: 50%;
+		margin-top: -75px;
+		padding: 20px;
+		width: 100px;
+		height: 150px;
+		background: rgba(0, 0, 0, .1);
+		color: #fff;
+		font-size: 20px;
+	}
+	#box span {
+		position: absolute;
+		left: -20px;
+		width: 20px;
+		height: 60px;
+		line-height: 20px;
+		background: #fe0;
+		color: #fff;
+		font-size: 12px;
+		text-align: center;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<span>分享到</span>
+		<p>QQ</p>
+		<p>WeChat</p>
+		<p>sina</p>
+	</div>
+```
+
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script type="text/javascript">
+	window.onload = function() {
+		var oBox = document.getElementById('box');
+		var oSpan = oBox.children[0];
+
+		oBox.onmouseover = function() {
+			move(oBox, {right: 0}, {duration: 300});
+		}
+
+		oBox.onmouseout = function() {
+			move(oBox, {right: -140}, {duration: 300});
+		}
+	}
+</script>
+```
+
+效果示例
+![move框架应用 - 仿jiaThis分享到](http://ojvx9eehr.bkt.clouddn.com/jiaThis%E5%88%86%E4%BA%AB%E5%88%B0.gif)
+
+## 2. 幻灯片
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#box {
+		position: relative;
+		margin: 50px auto;
+		width: 400px;
+		height: 300px;
+		overflow: hidden;
+	}
+	ul {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 1200px;
+		height: 250px;
+	}
+	ul li {
+		width: 400px;
+		height: 250px;
+		float: left;
+		list-style: none;
+	}
+	ul li img {
+		width: 100%;
+		height: 100%;
+	}
+	ol {
+		position: absolute;
+		left: 50%;
+		bottom: 50px;
+		margin-left: -45px;
+	}
+	ol li {
+		margin: 10px;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		border: 1px solid #fff;
+		font-size: 8px;
+		text-align: center;
+		line-height: 10px;
+		color: #fff;
+		cursor: pointer;
+	}
+	ol li.active {
+		background: #ccc;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<ul>
+			<li><img src="img/slide1.jpg"></li>
+			<li><img src="img/slide2.jpg"></li>
+			<li><img src="img/slide3.jpg"></li>
+		</ul>
+		<ol>
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+		</ol>
+	</div>
+```
+
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script type="text/javascript">
+	window.onload = function() {
+		var oBox = document.body.children[0];
+		var oUl = oBox.children[0];
+		var oOl = oBox.children[1];
+		var aLi = oUl.children;
+		var aLi2 = oOl.children;
+
+		for(var i = 0; i < aLi2.length; i++) {
+			aLi2[i].index = i;
+			(function(index) {
+				aLi2[i].onmouseover = function() {
+					for(var i = 0; i < aLi2.length; i++) {
+						aLi2[i].className = '';
+					}
+					this.className = 'active';
+					move(oUl, {marginLeft: - this.index * aLi[0].offsetWidth}, {duration: 500});
+				}
+			})(i);
+		}
+	}
+</script>
+```
+
+效果示例
+![move框架应用 - 幻灯片](http://ojvx9eehr.bkt.clouddn.com/move%E6%A1%86%E6%9E%B6%E5%BA%94%E7%94%A8%20-%20%E5%B9%BB%E7%81%AF%E7%89%87.gif)
+
+
+## 3. 手风琴
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#box {
+		position: relative;
+		margin: 50px auto;
+		width: 380px;
+		height: 200px;
+		overflow: hidden;
+	}
+	#box ul {
+		width: 380px;
+		height: 200px;
+	}
+	#box ul li {
+		position: absolute;
+		list-style: none;
+		width: 380px;
+		height: 200px;
+	}
+	#box ul li img{
+		width: 100%;
+		height: 100%;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<ul>
+			<li><img src="img/slide1.jpg"></li>
+			<li><img src="img/slide2.jpg"></li>
+			<li><img src="img/slide3.jpg"></li>
+			<li><img src="img/slide4.jpg"></li>
+			<li><img src="img/slide5.jpg"></li>
+		</ul>
+	</div>
+```
+
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script type="text/javascript">
+	window.onload = function() {
+		var oBox = document.body.children[0];
+		var oUl = oBox.children[0];
+		var aLi = oUl.children;
+
+		var w = 30;
+		for(var i = 1; i < aLi.length; i++) {
+			aLi[i].style.left = oBox.offsetWidth - (aLi.length - i) * w + 'px';
+		}
+
+		for(var i = 0; i < aLi.length; i++) {
+			aLi[i].index = i;
+			aLi[i].onmouseover = function() {
+				for(var i = 0; i < aLi.length; i++) {
+					if(i <= this.index) {
+						move(aLi[i], {left: i * w});  // 小于当前位置往右推
+					} else {
+						move(aLi[i], {left: oBox.offsetWidth - (aLi.length - i) * w});  // 大于当前位置往左推
+					}
+				}
+			}
+		}
+		}
+</script>
+```
+
+效果示例
+![move框架应用 - 手风琴](http://ojvx9eehr.bkt.clouddn.com/%E6%89%8B%E9%A3%8E%E7%90%B4.gif)
+
+## 4. 多图片展开
+
+> 这个示例是有问题的，展开的z-index没有调整好，在此求解！
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#box {
+		position: relative;
+		margin: 50px auto;
+		width: 660px;
+	}
+	#box ul {
+		width: 660px;
+	}
+	#box ul li {
+		float: left;
+		list-style: none;
+		margin: 10px;
+		width: 200px;
+		height: 100px;
+	}
+	#box ul li img {
+		width: 100%;
+		height: 100%;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<ul>
+			<li><img src="img/slide1.jpg"></li>
+			<li><img src="img/slide2.jpg"></li>
+			<li><img src="img/slide3.jpg"></li>
+			<li><img src="img/slide4.jpg"></li>
+			<li><img src="img/slide5.jpg"></li>
+			<li><img src="img/slide6.jpg"></li>
+			<li><img src="img/slide7.jpg"></li>
+			<li><img src="img/slide8.jpg"></li>
+			<li><img src="img/slide9.jpg"></li>
+		</ul>
+	</div>
+```
+
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script type="text/javascript">
+	window.onload = function() {
+		var oBox = document.body.children[0];
+		var oUl = oBox.children[0];
+		var aLi = oUl.children;
+		var bSin = false;
+
+		var aPos = [];
+		for(var i = 0; i < aLi.length; i++) {
+			aPos[i] = {
+				left: aLi[i].offsetLeft,
+				top: aLi[i].offsetTop
+			}
+		}
+
+		//浮动定位 -> 绝对定位
+		for(var i = 0; i < aLi.length; i++) {
+			aLi[i].style.position = 'absolute';
+			aLi[i].style.left = aPos[i].left + 'px';
+			aLi[i].style.top = aPos[i].top + 'px';
+			aLi[i].style.margin = 0;
+		}
+
+		//移上中心放大动画
+		for(var i = 0; i < aLi.length; i++) {
+			aLi[i].index = i;
+			aLi[i].onmouseover = function() {
+				if(bSin) return;
+				bSin = true;
+				for(var i = 0; i < aLi.length; i++) {
+					aLi[i].style.zIndex = 0;
+				}
+				move(this, {
+					width: 600,
+					height: 300,
+					left: 30,
+					top: 30
+				});
+				this.style.zIndex = 1;
+			}
+
+			aLi[i].onmouseout = function() {
+				move(this, {
+					width: 200,
+					height: 100,
+					left: aPos[this.index].left,
+					top: aPos[this.index].top
+				});
+				bSin = false;
+				// this.style.zIndex = 0;
+			}
+		}
+	}
+</script>
+```
+
+> 这个示例是有问题的，展开的z-index没有调整好，在此求解！
+
+效果示例
+![move框架应用 - 多图片展开](http://ojvx9eehr.bkt.clouddn.com/move%E6%A1%86%E6%9E%B6%E5%BA%94%E7%94%A8%20-%20%E5%A4%9A%E5%9B%BE%E7%89%87%E5%B1%95%E5%BC%80.gif)
+
+
+---
+#blog12(move框架应用) (中)
+---
+
+## 5. 运动时钟
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#box {
+		margin: 20px auto;
+		width: 185px;
+		height: 35px;
+		line-height: 35px;
+		overflow: hidden;
+	}
+	#box ul li {
+		float: left;
+		position: relative;
+		list-style: none;
+		width: 23px;
+		height: 35px;
+	}
+	#box ul li img {
+		position: absolute;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<ul>
+			<li><img src="img/num.png"></li>
+			<li><img src="img/num.png"></li>
+			<li>:</li>
+			<li><img src="img/num.png"></li>
+			<li><img src="img/num.png"></li>
+			<li>:</li>
+			<li><img src="img/num.png"></li>
+			<li><img src="img/num.png"></li>
+		</ul>
+	</div>
+```
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script>
+	function toDou(num) {
+		return num < 10 ? '0' + num : '' + num;
+	}
+
+	window.onload = function() {
+		var oBox = document.body.children[0];
+		var oUl = oBox.children[0];
+		var aImg = oUl.getElementsByTagName('img');
+
+		clock();
+		setInterval(clock, 1000);
+
+		function clock() {
+			var oDate = new Date();
+			var iH = oDate.getHours();
+			var iM = oDate.getMinutes();
+			var iS = oDate.getSeconds();
+
+			var str = toDou(iH) + toDou(iM) + toDou(iS);
+
+			for(var i = 0; i < aImg.length; i++) {
+				// aImg[i].style.top = - str.charAt(i) * 35 + 'px';
+				move(aImg[i], {top: - str.charAt(i) * 35}, {duration: 500});
+			}
+		}
+	}
+</script>
+```
+
+
+效果示例
+![move框架应用 - 动态时钟](http://ojvx9eehr.bkt.clouddn.com/%E5%8A%A8%E6%80%81%E6%97%B6%E9%92%9F.gif)
+
+## 6. 返回顶部
+
+> 此例因为涉及documentElement，move.js中没有相关判断，所以用move.js原理写了一个
+
+``` css
+<style>
+	body {
+		height: 3000px;
+	    background: linear-gradient(red,blue);
+	}
+	input {
+	    position: fixed;
+	    right: 20px;
+	    bottom: 20px;
+	    display: none;
+	}
+</style>
+```
+
+``` html
+	<input type="button" value="返回顶部" id="btn1" />
+```
+``` javascript
+<script>
+	window.onload = function() {
+	    var oBtn = document.getElementById('btn1');
+
+	    var timer = null;
+	    // 添加滚动事件
+	    var bSin = false;
+	    window.onscroll = function() {
+	        if (bSin) {
+	            clearInterval(timer);
+	        }
+	        bSin = true;
+	        var scrollT = document.documentElement.scrollTop || document.body.scrollTop;
+	        if (scrollT > 0) {
+	            // 按钮出来
+	            oBtn.style.display = 'block';
+	        } else {
+	            oBtn.style.display = 'none';
+	        }
+	    };
+
+	    // 按钮事件
+	    oBtn.onclick = function() {
+	        // 先关后开
+	        var scrollT = document.documentElement.scrollTop || document.body.scrollTop;
+	        clearInterval(timer);
+	        var count = Math.floor(1000/30);
+	        var dis = 0 - scrollT;
+	        var n = 0;
+	        timer = setInterval(function(){
+	            bSin = false;
+	            n++;
+	            var a = 1-n/count;
+	            var cur = scrollT + dis*(1-Math.pow(a,3));
+	            document.documentElement.scrollTop = document.body.scrollTop = cur;
+	            if (n == count) {
+	                clearInterval(timer);
+	            }
+	        },30);
+	    };
+	};
+</script>
+```
+
+效果示例
+![move框架应用 - 返回顶部](http://ojvx9eehr.bkt.clouddn.com/%E8%BF%94%E5%9B%9E%E9%A1%B6%E9%83%A8.gif)
+
+## 7. 无缝滚动
+
+> 此例资源为4张不重复图片，宽度为相应宽度*4
+
+1. ul里的内容复制一份达到无缝的目的，再计算ul宽度
+
+2. **模%求得余数**
+  - 往左走(left负数)
+	W = oUl.offsetWidth / 2;
+	left -= 5;
+	left = left % W;
+  - 往右走(left正数)
+	W = oUl.offsetWidht / 2;
+	left += 5;
+	left = (left % W - W) % W;
+
+``` css
+<style>
+	* {
+	    margin: 0;
+	    padding: 0;
+	}
+	#box {
+	    width: 1280px;
+	    height: 220px;
+	    border: 1px solid #000;
+	    position: relative;
+	    margin: 100px auto;
+	    overflow: hidden;
+	}
+	#box ul {
+	    position: absolute;
+	    left: 0;
+	    top: 0;
+	}
+	#box ul li {
+	    float: left;
+	    padding: 10px;
+	    list-style: none;
+	    width: 300px;
+	    height: 200px;
+	}
+	#box ul li img {
+	    width: 100%;
+	    height: 100%;
+	}
+	#box span {
+	    z-index: 2;
+	    position: absolute;
+	    top: 0;
+	    width: 640px;
+	    height: 220px;
+	}
+	#left {
+	    left: 0;
+	}
+	#right {
+	    right: 0;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+	    <ul>
+	        <li><img src="img/slide1.jpg" alt=""></li>
+	        <li><img src="img/slide2.jpg" alt=""></li>
+	        <li><img src="img/slide3.jpg" alt=""></li>
+	        <li><img src="img/slide4.jpg" alt=""></li>
+	    </ul>
+	    <span id="left"></span>
+	    <span id="right"></span>
+	</div>
+```
+``` javascript
+<script>
+	window.onload = function() {
+	    var oBox = document.getElementById('box');
+	    var oUl = oBox.children[0];
+	    var oL = oBox.children[1];
+	    var oR = oBox.children[2];
+	    var aLi = oUl.children;
+
+	    // 内容复制一份达到无缝的目的
+	    oUl.innerHTML += oUl.innerHTML;
+
+	    // 重新计算ul宽度
+	    oUl.style.width = aLi[0].offsetWidth * aLi.length + 'px';
+
+	    var timer = null;
+	    oL.onmouseover = function() {
+	        toLeft();
+	    };
+	    oR.onmouseover = function() {
+	        toRight();
+	    };
+
+	    var left = 0;
+	    var W = oUl.offsetWidth/2;
+
+	    toRight();  // 默认向右滚动
+
+	    function toRight() {
+	        clearInterval(timer);
+	        timer = setInterval(function(){
+	            left += 5;
+	            oUl.style.left = (left%W-W)%W + 'px';
+	        },30);
+	    }
+
+	    function toLeft() {
+	        clearInterval(timer);
+	        timer = setInterval(function(){
+	            left -= 5;
+	            oUl.style.left = (left%W-W)%W + 'px';
+	        },30);
+	    }
+	};
+</script>
+```
+效果示例
+![move框架应用 - 无缝滚动](http://ojvx9eehr.bkt.clouddn.com/%E6%97%A0%E7%BC%9D%E6%BB%9A%E5%8A%A8.gif)
+
+
+## 8. 无缝幻灯片
+
+1. ul里的内容复制一份达到无缝的目的，再计算ul宽度
+
+2. **模%求得余数**
+  - 往左走(left负数)
+	W = oUl.offsetWidth / 2;
+	left -= 5;
+	left = left % W;
+  - 往右走(left正数)
+	W = oUl.offsetWidht / 2;
+	left += 5;
+	left = (left % W - W) % W;
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#box {
+		position: relative;
+		margin: 50px auto;
+		width: 600px;
+		height: 350px;
+		overflow: hidden;
+	}
+	#box ul {
+		position: absolute;
+	}
+	#box ul li {
+		float: left;
+		list-style: none;
+		width: 100%;
+		height: 100%;
+
+	}
+	#box ul li img {
+		width: 100%;
+		height: 100%;
+	}
+	#box ol {
+		position: absolute;
+		left: 50%;
+		bottom: 10px;
+		width: 100px;
+		margin-left: -50px;
+	}
+	#box ol li {
+		float: left;
+		margin: 5px;
+		list-style: none;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		background: #666;
+		opacity: .7;
+		cursor: pointer;
+	}
+	#box ol li.active {
+		background: #fff;
+	}
+	#box a {
+		position: absolute;
+		z-index: 1;
+		top: 50%;
+		margin-top: -25px;
+		width: 30px;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		background: #666;
+		color: #fff;
+		opacity: .1;
+		border-radius: 2px;
+		text-decoration: none;
+	}
+	#box a.prev {
+		left: 0;
+	}
+	#box a.next {
+		right: 0;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<a href="javascript:;" class="prev">←</a>
+		<a href="javascript:;" class="next">→</a>
+		<ul>
+			<li><img src="img/slide1.jpg"></li>
+			<li><img src="img/slide2.jpg"></li>
+			<li><img src="img/slide3.jpg"></li>
+			<li><img src="img/slide4.jpg"></li>
+			<li><img src="img/slide5.jpg"></li>
+		</ul>
+		<ol>
+			<li class="active"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ol>
+	</div>
+```
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script>
+	window.onload = window.onresize = function() {
+		var oBox = document.body.children[0];
+		var oPrev = oBox.children[0];
+		var oNext = oBox.children[1];
+		var oUl = oBox.children[2];
+		var oOl = oBox.children[3];
+		var aLi = oUl.children;
+		var aBtn = oOl.children;
+
+		var iNow = 0;
+
+		oBox.onmouseover = function() {
+			clearInterval(timer2);
+			move(oPrev, {opacity: 0.7}, {duration: 500});
+			move(oNext, {opacity: 0.7}, {duration: 500});
+		}
+
+		oBox.onmouseout = function() {
+			carousel();
+			move(oPrev, {opacity: 0.1}, {duration: 300});
+			move(oNext, {opacity: 0.1}, {duration: 300});
+		}
+
+		for(var i = 0; i < aLi.length; i++) {
+			aLi[i].style.width = oBox.offsetWidth + 'px';
+		}
+		oUl.innerHTML += oUl.innerHTML;
+		oUl.style.width = aLi.length * (aLi[0].offsetWidth) + 'px';
+
+		var timer2 = null;
+		carousel();
+
+		function carousel() {
+			clearInterval(timer2);
+			timer2 = setInterval(function() {
+				iNow++;
+				tab();
+			}, 3000);
+		}
+
+		for(var i = 0; i < aBtn.length; i++) {
+			aBtn[i].index = i;
+			aBtn[i].onmouseover = function() {
+				// iNow = this.index;
+
+				//第几轮，解决第二轮之后上移运动回第一轮的问题
+				iNow = Math.floor(iNow/aBtn.length)*aBtn.length+this.index;
+				tab();
+			}
+		}
+
+		oPrev.onclick = function() {
+			iNow--;
+			tab();
+		}
+
+		oNext.onclick = function() {
+			iNow++;
+			tab();
+		}
+
+		function tab() {
+			for(var i = 0; i < aBtn.length; i++) {
+				aBtn[i].className = '';
+			}
+
+			//解决当iNow<0时aBtn[iNow%aBtn.length]找不到的问题
+            aBtn[(iNow%aBtn.length+aBtn.length)%aBtn.length].className = 'active';
+			// move(oUl, {left: - aLi[0].offsetWidth * iNow}, {duration: 500});
+			toR(oUl, - aLi[0].offsetWidth * iNow);
+		}
+
+		var iW = oUl.offsetWidth / 2;
+		var timer = null;
+		var left = 0;
+		function toR(obj, iTarget) {
+			clearInterval(timer);
+			var start = left;
+			var dis = iTarget - start;
+			var count = Math.floor(1000 / 30);
+			var n = 0;
+			timer = setInterval(function() {
+				n++;
+				var a = n / count;
+				var cur = start + dis * a;
+				left = cur;
+				oUl.style.left = (left % iW - iW) % iW + 'px';
+
+				if(n == count) {
+					clearInterval(timer);
+				}
+			}, 30);
+		}
+	}
+</script>
+```
+效果示例
+![move框架应用 - 无缝幻灯片](http://ojvx9eehr.bkt.clouddn.com/%E6%97%A0%E7%BC%9D%E5%B9%BB%E7%81%AF%E7%89%87.gif)
+
+## 9. 带进度条的无缝幻灯片
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#box {
+		position: relative;
+		margin: 50px auto;
+		width: 350px;
+		height: 200px;
+		overflow: hidden;
+	}
+	#box ul {
+		position: absolute;
+	}
+	#box ul li {
+		float: left;
+		list-style: none;
+		width: 350px;
+		height: 200px;
+		text-align: center;
+		line-height: 200px;
+		font-size: 80px;
+		color: #ffb;
+	}
+	#box ol {
+		position: absolute;
+		left: 50%;
+		bottom: 10px;
+		margin-left: -150px;
+		width: 300px;
+	}
+	#box ol li {
+		position: relative;
+		float: left;
+		margin: 10px;
+		list-style: none;
+		width: 40px;
+		height: 10px;
+		background: #fff;
+	}
+	#box ol li span {
+		position: absolute;
+		top: 0;
+		width: 0;
+		height: 10px;
+		background: #666;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<ul>
+			<li style="background: #aaa">1</li>
+			<li style="background: #afe">2</li>
+			<li style="background: #50f">3</li>
+			<li style="background: #aea">4</li>
+			<li style="background: #fe0">5</li>
+		</ul>
+		<ol>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
+		</ol>
+	</div>
+```
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script>
+	window.onload = function() {
+		var oBox = document.body.children[0];
+		var oUl = oBox.children[0];
+		var aLi = oUl.children;
+		var oOl = oBox.children[1];
+		var aSpan = oOl.getElementsByTagName('span');
+
+		oUl.innerHTML += oUl.innerHTML;
+		oUl.style.width = aLi.length * aLi[0].offsetWidth + 'px';
+
+		var iNow = 0;
+		next();
+
+		function next() {
+			move(aSpan[iNow % aSpan.length], {width: 40}, {easing: 'ease-out',complete: function(){
+				// 回调函数
+				iNow++;
+				for(var i = 0; i < aSpan.length; i++) {
+					aSpan[i].style.width = 0;
+				}
+				move2(oUl, -iNow * aLi[0].offsetWidth, function() {
+					!bSin && next();
+				});
+			}});
+		}
+
+		var iW = oUl.offsetWidth / 2;
+		var left = 0;
+		var timer = null;
+
+		function move2(obj, iTarget, complete) {
+			clearInterval(timer);
+			var start = left;
+			var dis = iTarget - start;
+			var count = Math.floor(1000 / 30);
+			var n = 0;
+			timer = setInterval(function() {
+				n++;
+				var a = n / count;
+				var cur = start + dis * a;
+				left = cur;
+				obj.style.left = (left % iW - iW) % iW + 'px';
+				if(n == count) {
+					clearInterval(timer);
+					complete && complete();
+				}
+			}, 30);
+		}
+
+		var bSin = false;
+		oBox.onmouseover = function() {
+			bSin = true;
+			for(var i = 0; i < aSpan.length; i++) {
+				clearInterval(aSpan[i].timer);
+				aSpan[i].style.width = 0;
+			}
+		}
+
+		oBox.onmouseout = function() {
+			bSin = false;
+			next();
+		}
+
+	}
+</script>
+```
+
+效果示例
+![move框架应用 - 带进度条的无缝幻灯片](http://ojvx9eehr.bkt.clouddn.com/%E5%B8%A6%E8%BF%9B%E5%BA%A6%E6%9D%A1%E7%9A%84%E6%97%A0%E7%BC%9D%E5%B9%BB%E7%81%AF%E7%89%87.gif)
+
+---
+#blog13(move框架应用) (下)
+---
+
+## 10. 打字依次显示效果
+
+``` css
+<style>
+	body {
+		background: #000;
+	}
+	span {
+		color: #fff;
+		font-size: 20px;
+		opacity: 0;
+	}
+</style>
+```
+
+``` html
+
+```
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script>
+	window.onload = function () {
+		var str = '往左走(left负数)W = oUl.offsetWidth / 2;left -= 5;left = left % W;往右走(left正数)W = oUl.offsetWidht / 2;left += 5;left = (left % W - W) % W;';
+		for(var i = 0; i < str.length; i++) {
+			var oS = document.createElement('span');
+			oS.innerHTML = str.charAt(i);
+			document.body.appendChild(oS);
+		}
+
+		var aSpan = document.body.children;
+		var i = 0;
+
+		// 分步运动
+		var timer = setInterval(function() {
+			move(aSpan[i], {opacity: 1}, {duration: 100});
+			i++;
+			if(i == aSpan.length) {
+				clearInterval(timer);
+			}
+		}, 100);
+
+	}
+</script>
+```
+效果示例
+![move框架应用 - 打字依次显示效果](http://ojvx9eehr.bkt.clouddn.com/%E6%89%93%E5%AD%97%E4%BE%9D%E6%AC%A1%E5%BC%B9%E5%87%BA%E6%95%88%E6%9E%9C.gif)
+
+
+## 11. 收起当前页放出下一页效果
+
+``` css
+<style>
+	* {
+	    margin: 0;
+	    padding: 0;
+	}
+	ul {
+	    width: 516px;
+	    margin: 50px auto;
+	}
+	ul li {
+	    list-style: none;
+	    width: 150px;
+	    height: 150px;
+	    background: #ccc;
+	    float: left;
+	    margin: 10px;
+	    border: 1px solid #000;
+	}
+</style>
+```
+
+``` html
+	<input type="button" value="下一页" id="btn1" />
+	<ul id="ul1">
+	    <li></li>
+	    <li></li>
+	    <li></li>
+	    <li></li>
+	    <li></li>
+	    <li></li>
+	    <li></li>
+	    <li></li>
+	    <li></li>
+	</ul>
+```
+
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script>
+	window.onload = function() {
+	    var oBtn = document.getElementById('btn1');
+	    var oUl = document.getElementById('ul1');
+	    var aLi = oUl.children;
+
+	    // 浮动定位 -> 绝对定位
+	    var aPos = [];
+	    for (var i = 0; i < aLi.length; i++) {
+	        aPos[i] = {
+	            left: aLi[i].offsetLeft,
+	            top: aLi[i].offsetTop
+	        };
+	    }
+	    for (var i = 0; i < aLi.length; i++) {
+	        aLi[i].style.position = 'absolute';
+	        aLi[i].style.left = aPos[i].left + 'px';
+	        aLi[i].style.top = aPos[i].top + 'px';
+	        aLi[i].style.margin = 0;
+	    }
+
+	    var timer = null;
+	    var bSin = false;
+	    oBtn.onclick = function() {
+	        if (bSin) return;
+	        bSin = true;
+
+	        // 分步运动
+	        var i = 0;
+	        timer = setInterval(function(){
+	            (function(index){
+	                // 收起
+	                move(aLi[i], {
+	                    left: 0, top:0, width: 0,
+	                    height: 0, opacity: 0
+	                },{
+	                    complete: function() {	// 回调函数
+	                        if (index == aLi.length-1) {
+	                            // 放出
+	                            for (var i = 0; i < aLi.length; i++) {
+	                                aLi[i].style.background = 'rgb('+parseInt(Math.random()*256)+','+parseInt(Math.random()*256)+','+parseInt(Math.random()*256)+')';
+	                            }
+
+	                            timer = setInterval(function(){
+	                                (function(index2){
+	                                    move(aLi[index], {
+	                                        left: aPos[index].left, top: aPos[index].top, width: 150, height: 150, opacity: 1
+	                                    },{
+	                                        complete: function(){
+	                                            if (index2 == 0) {
+	                                            	// 放出最后一张后点击才有效
+	                                                bSin = false;
+	                                            }
+	                                        }
+	                                    });
+	                                })(index);
+
+	                                index--;
+	                                if (index < 0) {
+	                                    clearInterval(timer);
+	                                }
+	                            },200);
+	                        }
+	                    }
+	                })
+	            })(i);
+
+	            i++;
+	            if (i == aLi.length) {
+	                clearInterval(timer);
+	            }
+	        },200);
+	    };
+	};
+</script>
+```
+效果示例
+![move框架应用 - 收起当前页放出下一页效果](http://ojvx9eehr.bkt.clouddn.com/move%E6%A1%86%E6%9E%B6%E5%BA%94%E7%94%A8%20-%20%E6%94%B6%E8%B5%B7%E5%BD%93%E5%89%8D%E9%A1%B5%E6%94%BE%E5%87%BA%E4%B8%8B%E4%B8%80%E9%A1%B5%E6%95%88%E6%9E%9C.gif)
+
+
+
+## 12. 分块运动
+
+1. 自定义行数R、列数C
+2. 创建span
+   计算oSpan的width、height、left、top、background-position
+
+  > 注意：先appendChild才能获取oSpan的offsetWidth和offsetHeight
+
+3. 分步运动，依次显示span
+
+**优化：setInterval可用for循环+setTimeout替代，可设置行列相关时同一时间出现**
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	#btn{
+		margin: 20px auto;
+		padding: 5px;
+		width: 100px;
+		height: 20px;
+		background: #f5850e;
+		color: #fff;
+		font-size: 16px;
+		text-align: center;
+		line-height: 20px;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+	#box {
+		position: relative;
+		margin: 50px auto;
+		width: 500px;
+		height: 300px;
+		background: url('img/slide0.jpg');
+	}
+	#box span{
+		position: absolute;
+		opacity: .1;
+		/* opacity: 0; */
+	}
+</style>
+```
+
+``` html
+	<div id='btn'>点击随机变换</div>
+	<div id="box"></div>
+```
+
+``` javascript
+<script type="text/javascript" src='move.js'></script>
+<script>
+	window.onload = function() {
+		var oBtn = document.body.children[0];
+		var oBox = document.body.children[1];
+
+		var R = 3;
+		var C = 5;
+
+		// 整图 -> 分块(绝对定位)
+		for(var r = 0; r < R; r++) {
+			for(var c = 0; c < C; c++) {
+				var oSpan = document.createElement('span');
+				oSpan.style.width = oBox.offsetWidth / C + 'px';
+				oSpan.style.height = oBox.offsetHeight / R + 'px';
+				oBox.appendChild(oSpan);
+				oSpan.style.left = oSpan.offsetWidth * c + 'px';
+				oSpan.style.top = oSpan.offsetHeight * r + 'px';
+				oSpan.style.backgroundPosition = - oSpan.offsetWidth * c + 'px ' + (-oSpan.offsetHeight * r) + 'px';
+				oSpan.r = r;
+				oSpan.c = c;
+			}
+		}
+
+		var aSpan = oBox.children;
+		var iNow = 0;
+		var bSin = false;
+
+		oBtn.onclick = function() {
+			if(bSin) {return;}
+			bSin = true;
+			iNow++;
+			oBox.style.background = 'url("img/slide'+ (iNow%9-1+9)%9 +'.jpg")';
+
+			block(parseInt(Math.random()*7+1));		// 随机变换显示方式
+		}
+
+		var json = {};
+		for(var i = 0; i < 8; i++) {
+			json[i] = 0;
+		}
+
+		function block(method) {
+			json[method]++;
+			var med = 1;
+			for(var i = 0; i < aSpan.length; i++) {
+				(function(index) {
+					switch(method) {
+						case 1: med = index;
+							break;
+						case 2: med = aSpan[index].r + aSpan[index].c;  // 斜角显示
+							break;
+						case 3: med = aSpan[index].r * aSpan[index].c;
+							break;
+						case 4: med = aSpan[index].r - aSpan[index].c;
+							break;
+						case 5: med = aSpan[index].r / aSpan[index].c;
+							break;
+						case 6: med = aSpan.length - index;  // 由下至上
+							break;
+						case 7: med = Math.random();
+							break;
+					}
+					setTimeout(function(){
+						aSpan[index].style.backgroundImage = 'url("img/slide'+ iNow%9 + '.jpg")';
+						aSpan[index].style.opacity = 0.1;
+						(function(index2) {
+							move(aSpan[index], {opacity: 1}, {complete: function() {
+									if(index2 == aSpan.length - 1) {
+										// 放出最后一个分块后点击才有效
+										bSin = false;
+									}
+							}});
+						})(index);
+					}, 100*(med));	// 每个分块延迟时间不同，达到依次显示的效果
+				})(i);
+			}
+		}
+	}
+</script>
+```
+效果示例
+![move框架应用 - 分块运动](http://ojvx9eehr.bkt.clouddn.com/move%E6%A1%86%E6%9E%B6%E5%BA%94%E7%94%A8%20-%20%E5%88%86%E5%9D%97%E8%BF%90%E5%8A%A8.gif)
+
+
+## 13. 仿Mac 感应变大效果
+
+1. 感应距离：一般为500
+
+  比例：scale = 1 - c/500;
+
+2. 勾股定理计算鼠标至图片中心距离
+
+  var a = getPos(aImg[i]).left + aImg[i].offsetWidth / 2 - oEvent.clientX;
+
+  var b = getPos(aImg[i]).top + aImg[i].offsetHeight / 2 - oEvent.clientY;
+
+ var c = Math.sqrt(a * a + b * b);
+
+3. 计算方放大比例，范围为[0.5, 1]
+  var scale = 1 - c / 500;
+  scale < 0.5 && (scale = 0.5);
+  aImg[i].style.width = scale * 80 + 'px';
+
+
+``` css
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+
+	#box {
+		position: absolute;
+		bottom: 20px;
+		width: 100%;
+		text-align: center;
+	}
+</style>
+```
+
+``` html
+	<div id="box">
+		<img src="img/per-1.png" width="40">
+		<img src="img/per-2.png" width="40">
+		<img src="img/per-3.png" width="40">
+	</div>
+```
+
+``` javascript
+<script>
+	function getPos(obj) {
+		var l = 0;
+		var t = 0;
+		while(obj) {
+			l += obj.offsetLeft;
+			t += obj.offsetTop;
+			obj = obj.offsetParent;
+		}
+
+		return {left: l, top: t};
+	}
+	window.onload = function() {
+		var oBox = document.body.children[0];
+		var aImg = oBox.children;
+
+		document.onmousemove = function(ev) {
+			var oEvent = ev || event;
+			for(var i = 0; i < aImg.length; i++) {
+
+				// 勾股定理计算鼠标至图片中心距离
+				var a = getPos(aImg[i]).left + aImg[i].offsetWidth / 2 - oEvent.clientX;
+				var b = getPos(aImg[i]).top + aImg[i].offsetHeight / 2 - oEvent.clientY;
+				var c = Math.sqrt(a * a + b * b);
+
+				//计算方放大比例，范围为[0.5, 1]
+				var scale = 1 - c / 500;
+				scale < 0.5 && (scale = 0.5);
+				aImg[i].style.width = scale * 80 + 'px';
+			}
+		}
+	}
+</script>
+```
+效果示例
+![move框架应用 - 感应变大效果](http://ojvx9eehr.bkt.clouddn.com/move%E6%A1%86%E6%9E%B6%E5%BA%94%E7%94%A8%20-%20%E6%84%9F%E5%BA%94%E5%8F%98%E5%A4%A7.gif)
+
+
+
+---
+#blog14
+---
