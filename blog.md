@@ -4,54 +4,60 @@
 
 ---
 
-##1. js六大数据类型
+## 1. js六大数据类型
 
 > null并非typeof出来的类型，不过由于null不可再分，所以将其归于基本数据类型之中。
 
-###基本数据类型
-- number    数字
-- string    字符串
-- boolean   布尔
-- undefined 未定义
-- function  函数
+> typeof类型：undefined、boolean、string、number、object、function
 
-###复杂数据类型
-- object    对象(可拆分为多种数据类型)
+**以下是根据ECMAScript标准的数据类型分类**
 
-##2. 数据类型补充
+### 基本数据类型
+- Number    数字
+- String    字符串
+- Boolean   布尔
+- Undefined 未定义
+- **Null 空对象**
+
+- Symbol  独一无二的值(ES6新增)
+
+### 复杂数据类型
+- Object    对象(可拆分为多种数据类型)
+
+## 2. 数据类型补充
 
 - null空对象 -> 数据类型(object)
 - NaN 非数字 -> 数据类型(number)
 
 >  NaN和任何数据类型都不相等，包括自己
 
-##3. 数字相关判断方法
+## 3. 数字相关判断方法
 
-- ###是否是数字
+- ### 是否是数字
 isNaN() 非数字->true  数字->false
-- ###是否是整数
+- ### 是否是整数
 if(num == parseInt(num))
 
-##4. 变量
+## 4. 变量
 
-1. ###全局变量
-2. ###局部变量
-3. ###闭包
+1. ### 全局变量
+2. ### 局部变量
+3. ### 闭包
 	  子函数可以使用父函数的全局变量
 
 > 变量的遮蔽
   全局变量和局部变量同名
   就近原则->在函数里优先使用自己的变量
 
-##5. 运算符
+## 5. 运算符
 
-1. ###算术运算符
-2. ###比较运算符
+1. ### 算术运算符
+2. ### 比较运算符
 		== -> !=	=== -> !==
-3. ###赋值运算符
-4. ###逻辑运算符
+3. ### 赋值运算符
+4. ### 逻辑运算符
 
-##6. 常见变量命名前缀
+## 6. 常见变量命名前缀
 | 前缀 | 		全称      |     含义 	 		 | 示例       |
 | :--: | 	   :----: 	  |   :----: 	 		 | :---:      |
 | o    | 	   object  	  |   一个对象，一个元素 | oDiv       |
@@ -63,30 +69,30 @@ if(num == parseInt(num))
 | fn   | 	   function   |   函数 				 | fnSucc	  |
 | re   | 	   RegExp     |   正则 				 | reMailCheck|
 
-##7. 字符串转化为数字
-###parseInt()
+## 7. 字符串转化为数字
+### parseInt()
 - 从左往右开始找，找到第一个非数字(包含小数点)就停止，如果第一个数不是数字，则返回NaN
 - eg: '12.5' -> 12	'12abc' -> 12	'abc' -> NaN
 
-###parseFloat()
+### parseFloat()
 - 从左往右开始找，找到第一个非数字(不包含小数点)就停止，如果第一个数不是数字，则返回NaN
 - eg: '12.5' -> 12.5	'12abc' -> 12	'abc' -> NaN
 
-###Number()
+### Number()
 - 既能处理整数，也能处理小数，但只能处理数字
 - eg: '12.5' -> 12.5 	'12' -> 12 		'12abc' -> NaN 	'abc' -> NaN
 
-##8. 数字转化为字符串
+## 8. 数字转化为字符串
 number + ''
 
 > eg：12 + '' -> '12'
 
-##9. if语句变形
+## 9. if语句变形
 1. 条件 && 语句; (条件为真时执行)
 1. 条件 || 语句; (条件为假时执行)
 1. 三目运算  条件? 语句1: 语句2;
 
-##10. **js**及**事件**的概念
+## 10. **js**及**事件**的笼统概念
 - js：修改样式
 - 事件：用户的操作
 
@@ -798,7 +804,7 @@ json标准格式：{"name":value, "name2":value2, ...}
 #blog5(数组应用)
 ---
 ### 1. 数组翻转方法2
-eg:
+eg:这里说明一下，这个方法用的不是reverse，因为一次面试中被问过不用reverse实现翻转，所以这里标注为数组的翻转方法2。
 ``` javascript
 <script>
 	var arr=[1,2,3,4];
@@ -924,6 +930,26 @@ eg:
 </script>
 ```
 
+摘自[也谈JavaScript数组去重](http://web.jobbole.com/89843/)
+
+``` javascript
+<script>
+	function unique(arr) {
+        var ret = [];
+        var len = arr.length;
+        var tmp = {};
+        for(var i=0; i<len; i++){
+          if(!tmp[arr[i]]){
+            tmp[arr[i]] = 1;
+            ret.push(arr[i]);
+        }
+    }
+    return ret;
+}
+</script>
+
+```
+
 #### (3)sort()
 
 ``` javascript
@@ -944,7 +970,7 @@ eg:
 ``` javascript
 <script>
 	for(var i = 0; i < arr.length; i++) {
-		if(arr2.indexOf(arr[i] < 0)) {
+		if(arr2.indexOf(arr[i]) < 0) {
 			arr2.push(arr[i]);
 		}
 	}
@@ -990,6 +1016,44 @@ eg:
 	console.log(del(arr, 0 , arr.length - 1));
 </script>
 ```
+
+#### (6)Map(ES6)
+摘自[也谈JavaScript数组去重](http://web.jobbole.com/89843/)
+
+Map的存取使用单独的get()、set()接口。
+
+``` javascript
+<script>
+
+function unique(arr) {
+    var ret = [];
+    var len = arr.length;
+    var tmp = new Map();
+    for(var i=0; i<len; i++){
+        if(!tmp.get(arr[i])){
+            tmp.set(arr[i], 1);
+            ret.push(arr[i]);
+        }
+    }
+    return ret;
+}
+</script>
+```
+
+#### (7)Set(ES6)
+摘自[也谈JavaScript数组去重](http://web.jobbole.com/89843/)
+
+Set不允许重复元素出现。
+
+``` javascript
+<script>
+function unique(arr){
+    var set = new Set(arr);
+    return Array.from(set);
+}
+</script>
+```
+
 ---
 #blog6
 
@@ -1172,31 +1236,33 @@ GB2312：中文占2个字节
 ---
 #blog7(js组成)
 ---
-##1. js的组成部分
+## 1. js实现的组成
 
-###ECMA
-ECMAScript(**js核心**)
+### ECMA
+ECMAScript(**js核心**) 提供核心语言功能
 
 *兼容：完全兼容
 eg:
 ` if(){}
 arr.pop();`
-###DOM
-Document Object Model  文档对象模型
+### DOM
+Document Object Model  文档对象模型  提供访问和操作网页内容的方法和接口
+
+**DOM是针对XML但经过扩展用于HTML的应用程序接口(API)。**
 
 *兼容：大部分兼容，不兼容可以作兼容处理
 eg:
 `document.getElementById('id')
  oDiv.style.background = 'red';`
-###BOM
-Browser Object Model  浏览器对象模型
+### BOM
+Browser Object Model  浏览器对象模型  提供与浏览器交互的方法和接口
 
 *兼容：根据使用浏览器来，根本不兼容，且不能作兼容处理
 eg:
 `window.navigator.userAgent
  alert();`
 
-##2. DOM节点关系
+## 2. DOM节点关系
 1. 父子节点
 
 - 子节点：父节点.children;	(一级，一层)
@@ -1263,7 +1329,7 @@ eg:
 
 	(2) 父节点.children[父节点.children.length - 1]
 
-##3. DOM节点操作
+## 3. DOM节点操作
 1. 创建一个节点
 	var obj = document.createElement('tagName');
 2. 添加一个节点
@@ -1274,7 +1340,7 @@ eg:
 4. 替换一个节点
 	父节点.replaceChild(新节点, 删除的节点);
 
-##4. DOM属性操作
+## 4. DOM属性操作
 1. .
 2. []
 3. 可操作自定义属性
@@ -1284,7 +1350,7 @@ eg:
 
 > 获取设置属性方法尽量不混用
 
-##5. BOM
+## 5. BOM
 1. window.open(地址, 方式);	 打开新窗口
 	返回值：新的窗体对象
 		Chrome：拦截
@@ -3207,5 +3273,439 @@ var oSrc = oEvent.srcElement || oEvent.target;
 
 
 ---
-#blog14
+#blog14(命名规范)
 ---
+
+## 规范
+### Reset.css
+[张鑫旭-HTML5 css reset](http://www.zhangxinxu.com/wordpress/2010/08/html5-css-reset/)
+
+[目前比较全的CSS重设(reset)方法总结](http://www.cnblogs.com/hnyei/archive/2011/10/04/2198779.html)
+
+### css命名规范
+
+头：header　　 
+内容：content/container　　 
+尾：footer　　 
+导航：nav　　 
+侧栏：sidebar 
+栏目：column　　 
+包裹层：wrapper　　 
+左右中：left right center　　 
+登录条：loginbar　　 
+标志：logo　　 
+抽奖：raffle
+广告：banner　　 
+页面主体：main　　 
+热点：hot　　 
+新闻：news 
+下载：download　　 
+子导航：subnav　　 
+菜单：menu　　 
+子菜单：submenu　　 
+搜索：search　　 
+友情链接：friendlink　　 
+页脚：footer　　 
+版权：copyright　　 
+滚动：scroll　　 
+内容：content 
+标签页：tab 
+文章列表：list 
+提示信息：msg 
+小技巧：tips 
+栏目标题：title 
+加入：joinus 
+指南：guide 
+服务：service 
+注册：regsiter 
+状态：status 
+投票：vote 
+合作伙伴：partner 
+
+### 注释的写法 
+
+<!-- header -->
+<header>xxx</header>
+
+<!-- end header -->
+
+### id命名 
+
+#### (1)页面结构 
+
+容器: container 
+页头：header 
+内容：content/container 
+页面主体：main 
+页尾：footer 
+导航：nav 
+侧栏：sidebar 
+栏目：column 
+包裹层：wrapper 
+左右中：left right center 
+
+#### (2)导航 
+
+导航：nav 
+主导航：mainnav 
+子导航：subnav 
+顶导航：topnav 
+边导航：sidebar 
+左导航：leftsidebar 
+右导航：rightsidebar 
+菜单：menu 
+子菜单：submenu 
+标题: title 
+摘要: summary 
+
+#### (3)功能 
+标志：logo 
+广告：banner 
+登陆：login 
+登录条：loginbar 
+注册：regsiter 
+搜索：search 
+功能区：shop 
+标题：title 
+加入：joinus 
+状态：status 
+按钮：btn 
+滚动：scroll 
+标签页：tab 
+文章列表：list 
+提示信息：msg 
+当前的: current 
+小技巧：tips 
+图标: icon 
+注释：note 
+指南：guide 
+服务：service 
+热点：hot 
+新闻：news 
+下载：download 
+投票：vote 
+合作伙伴：partner 
+友情链接：link 
+版权：copyright 
+
+### class的命名 
+
+(1) 颜色:使用颜色的名称或者16进制代码,如 
+.red { color: red; } 
+.f60 { color: #f60; } 
+.ff8600 { color: #ff8600; } 
+
+(2) 字体大小,直接使用"font+字体大小"作为名称,如 
+.font12px { font-size: 12px; } 
+.font9pt {font-size: 9pt; } 
+
+(3) 对齐样式,使用对齐目标的英文名称,如 
+
+.left { float:left; } 
+
+(4) 标题栏样式,使用"类别+功能"的方式命名,如 
+.barnews { } 
+.barproduct { } 
+
+> 注意事项 
+1.一律小写; 
+2.尽量用英文; 
+3.尽量不缩写，除非一看就明白的单词.
+
+### css层次
+主要的 main.css
+模块 module.css 
+基本共用 base.css/global.css
+布局，版面 layout.css 
+主题 themes.css 
+专栏 columns.css 
+文字 font.css 
+表单 forms.css 
+补丁 mend.css 
+
+---
+#blog15(原生篇6) cookie、Require、数据交互前导
+---
+
+## 1. cookie
+
+**数据类型：string**
+
+1. 需在服务器环境中
+2. 不安全
+3. 过期时间(expires)：默认关闭浏览器时清空
+  > session的常见实现形式是会话cookie（session cookie），即未设置过期时间的cookie;
+  平常所说的cookie主要指的是另一类cookie——持久cookie（persistent cookies）。
+
+  ``` javascript
+  <script>
+    var oDate = new Date();
+    oDate.setDate(oDate.getDate()+3);  // 延迟三天清空
+    document.cookie = 'expires=' + oDate;
+  </script>
+  ```
+4. 容量小，4k左右
+5. 返回的数据类型是字符串，使用时需转化
+6. 内部能访问外部cookie，外部不能访问内部cookie
+   path统一设置到根目录  `document.cookie = 'name=value;path=/';`
+
+7. domain 设置域名访问
+	eg: baidu
+	baidu.com  `domain=baidu.com`  需在上一级域名设置domain
+	fanyi.baidu.com  `setCookie`
+	baike.baidu.com  `getCookie`
+
+8. 有缓存
+
+### 封装cookie.js
+``` javascript
+<script>
+
+	// 设置cookie
+	function setCookie(name, value, iDay) {
+		if(iDay) {
+			var oDate = new Date();
+			oDate.setDate(oDate.getDate() + iDay);
+			document.cookie = name + '=' + value + ';path=/;expires=' + oDate;
+			// document.cookie = name + '=' + value + ';path=/;expires=' + oDate + ';domain=localhost';  // 设置只能在localhost下设置cookie
+		} else {
+			document.cookie = name + '=' + value + ';path=/';  // 关闭浏览器时清空
+		}
+	}
+
+	// cookie形式 eg: "name1=value1; name2=value"  (表达式之间有空格)
+
+	// 获取cookie
+	function getCookie(name) {
+		var str = document.cookie;
+		var arr = str.split('; ');  // **分号后有空格
+		for(var i = 0; i < arr.length; i++) {
+			var arr2 = arr[i].split('=');
+			if(arr2[0] == name) {
+				return arr2[1];
+			}
+		}
+
+		return '';  // 没有找到即返回空字符串
+	}
+
+	// 移除cookie
+	function removeCookie(name) {
+		setCookie(name, 'xxx', -10);  // **将日期设为小于0的值  '-0'不能达到移除cookie的目的
+	}
+</script>
+```
+
+## 2. 模块化
+
+### sea.js && require.js
+| sea.js | 		require.js      |
+| :--: | 	   :----: 	  |
+| 采用CMD(通用模块定义,依赖就近)    | 	   采用AMD(异步模块定义,依赖前置)  	  |
+
+[AMD 和 CMD 的区别有哪些? - 玉伯的回答 - 知乎](https://www.zhihu.com/question/20351507/answer/14859415)
+
+## 3. Require.js
+
+[RequireJS 中文网](http://www.requirejs.cn/)
+
+**好处**
+1. 解决命名冲突
+2. 解决文件彼此依赖
+3. 自动引入js
+4. 异步加载，可维护性高
+   只发送一个请求，最终引用文件命名为init.js
+   或者`<script src="require.js" data-main="init"></script>`
+
+#### (1)定义模块
+
+r1.js
+``` javascript
+<script>
+
+	define(function(require, exports, module) {
+		// 引入模块，导出模块，批量导出
+		exports.a = 1;
+
+		// console.log(1);
+
+		// return {a:1, b:2};
+	});
+
+</script>
+```
+
+#### (2)使用模块
+``` javascript
+<script>
+
+	// require(['r1.js']);  // 可不写函数
+
+	require(['r1.js'], function(mod) {  // **使用时注意路径，若报错试着将路径改为'js/r1.js'
+		console.log(mod.a);	// 1
+	})
+
+</script>
+```
+
+``` javascript
+<script>
+
+	require(['r1.js', 'r2.js'], function(mod1, mod2) {	// 使用多个模块
+		console.log(mod1.a, mod2.a);
+	})
+
+</script>
+```
+
+#### (3)引用模块
+``` javascript
+<script>
+
+	define(function(require, exports, module) {
+		// 引入模块，导出模块，批量导出
+		var mod1 = require('r1.js');
+		var mod2 = require('r2.js');
+		exports.sum = function() {
+			return mod1.a + mod2.a;
+		}
+	});
+
+</script>
+```
+
+> 因专用于js，require时可省略类型后缀  'js/r1.js' -> 'js/r1'
+
+
+### Require的使用结构一般如下
+exp1.html放于主目录
+js文件放在js文件夹下
+
+exp1.html
+```
+...
+...
+
+<script src="js/require.js" data-main="js/init"></script>
+
+...
+...
+
+
+```
+
+init.js
+
+``` javascript
+<script>
+
+	require(['exp1']);
+
+</script>
+```
+
+exp1.js
+
+``` javascript
+<script>
+
+	define(function(require) {
+		var r1 = require('r1');
+
+		...
+		...
+
+		oBtn.onclick = function() {
+			...
+			r1(xxx);
+		}
+	})
+
+</script>
+```
+
+r1.js
+``` javascript
+<script>
+
+	define(function(require) {
+		var move = require('move');
+
+		...
+		...
+
+		return function(yyy) {
+			...
+
+			...
+
+			move(aaa, {opacity: 1});
+		}
+	})
+
+</script>
+```
+
+## 4. 数据交互
+
+### form提交数据
+缺点：(1)会刷新页面  (2)不能取出数据
+
+想要提交数据须有
+1. action 提交的地址 <form action=''></form>
+2. name   数据名称   <input name="user.tel" />
+3. value  数据       input.value
+
+提交方式
+1. get(默认) 容量32K左右  不安全，有缓存
+** 好处：(1)分享 (2)收藏**
+
+2. post      容量1G左右   相对安全，没有缓存
+
+> 缓存(cache)
+对于浏览器而言，相同的地址只会访问一次
+
+
+### ajax(Asynchronous JavaScript and XML，异步JavaScript和XML)
+1. 需在服务器环境中
+2. 编码需一致
+3. url若为文件名，可不写文件名后缀
+4. 返回的数据类型是字符串，使用时需转化
+5. 缓存(get方法)
+  浏览器清除缓存 `ctrl+F5` 或 `ctrl+alt+delete`
+  防止IE缓存
+    路径+随机因子
+    (1)`'路径?t=' + Math.random();`
+    (2)`'路径?t=' + oDate.getTime();`
+    eg:`var URL = 'user.php?act=login&user=' + logU.value + '&pass=' + logP.value + '&t=' + new Date().getTime();`
+
+## 5. eval的替代用法
+``` javascript
+<script>
+
+	function strTrs(str) {
+		var fn = new Function('return' + str);
+		return fn();
+	}
+
+</script>
+```
+
+## 6. 数据交互时输入中文问题
+中文转换URL编码 `encodeURIComponent(str)`
+解编码 `decodeURIComponent(str)`
+
+**IE兼容写法**
+``` javascript
+<script>
+
+	var URL = 'user.php?act=login&user=' + encodeURIComponent(logU.value) + '&pass=' + encodeURIComponent(logP.value) + '&t=' + new Date().getTime();
+
+</script>
+```
+
+
+---
+#blog16(Ajax jsonp)
+---
+
