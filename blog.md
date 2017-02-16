@@ -82,6 +82,39 @@ if(num == parseInt(num))
 - 既能处理整数，也能处理小数，但只能处理数字
 - eg: '12.5' -> 12.5 	'12' -> 12 		'12abc' -> NaN 	'abc' -> NaN
 
+``` javascript
+<script>
+	parseFloat("1") //1
+	parseFloat("1s") //1
+	parseFloat(null) //NaN
+	parseFloat(undefined) //NaN
+	parseFloat("") //NaN
+
+	Number("1") //1
+	Number("1s") //NaN
+	Number(null) //0 -> Number将非数字转换为了0
+	Number(undefined) //NaN
+	Number("") //0 -> Number将非数字转换为了0
+</script>
+```
+
+``` javascript
+<script>
+	// jquery解决Number问题
+
+	// isNumeric: function(obj) {
+	// 	return !jQuery.isArray(obj) && (obj - parseFloat(obj) + 1) >= 0;
+	// }
+
+	$.isNumeric("1") //true
+	$.isNumeric("1s") //false
+	$.isNumeric(null) //false
+	$.isNumeric(undefined) //false
+	$.isNumeric("") //false
+</script>
+```
+
+
 ## 8. 数字转化为字符串
 number + ''
 
@@ -1509,7 +1542,7 @@ obj.scrollHeight
 ``` javascript
 <script>
 	function addEvent(obj, sEv, fn) {	//对象, 事件(不加on), 函数名/函数
-		if(obj.addEventListner) {	//高级浏览器 -> function  低级 ->undefined
+		if(obj.addEventListener) {	//高级浏览器 -> function  低级 ->undefined
 			//高级浏览器
 			obj.addEventListener(sEv, fn, false);
 		} else {
@@ -3273,65 +3306,150 @@ var oSrc = oEvent.srcElement || oEvent.target;
 
 
 ---
-#blog14(命名规范)
+#blog14(前端规范)
 ---
 
-## 规范
-### Reset.css
+## 1. Reset.css
 [张鑫旭-HTML5 css reset](http://www.zhangxinxu.com/wordpress/2010/08/html5-css-reset/)
 
 [目前比较全的CSS重设(reset)方法总结](http://www.cnblogs.com/hnyei/archive/2011/10/04/2198779.html)
 
-### css命名规范
+## 2. css命名规范
 
-头：header　　 
-内容：content/container　　 
-尾：footer　　 
-导航：nav　　 
-侧栏：sidebar 
-栏目：column　　 
-包裹层：wrapper　　 
-左右中：left right center　　 
-登录条：loginbar　　 
-标志：logo　　 
-抽奖：raffle
-广告：banner　　 
-页面主体：main　　 
-热点：hot　　 
-新闻：news 
-下载：download　　 
-子导航：subnav　　 
-菜单：menu　　 
-子菜单：submenu　　 
-搜索：search　　 
-友情链接：friendlink　　 
-页脚：footer　　 
-版权：copyright　　 
-滚动：scroll　　 
-内容：content 
-标签页：tab 
-文章列表：list 
-提示信息：msg 
-小技巧：tips 
-栏目标题：title 
-加入：joinus 
-指南：guide 
-服务：service 
-注册：regsiter 
-状态：status 
-投票：vote 
-合作伙伴：partner 
+**CSS内部的分类及其顺序**
 
-### 注释的写法 
+1. **布局（grid）（.g-）**：将页面分割为几个大块，通常有头部、主体、主栏、侧栏、尾部等！
+2. **模块（module）（.m-）**：通常是一个语义化的可以重复使用的较大的整体！比如导航、登录、注册、各种列表、评论、搜索等！
+3. **元件（unit）（.u-）**：通常是一个不可再分的较为小巧的个体，通常被重复用于各种模块中！比如按钮、输入框、loading、图标等！
+4. **功能（function）（.f-）**：为方便一些常用样式的使用，我们将这些使用率较高的样式剥离出来，按需使用，通常这些选择器具有固定样式表现，比如清除浮动等！不可滥用！
+5. **皮肤（skin）（.s-）**：如果你需要把皮肤型的样式抽离出来，通常为文字色、背景色（图）、边框色等，非换肤型网站通常只提取文字色！非换肤型网站不可滥用此类！
+6. **状态（.z-）**：为状态类样式加入前缀，统一标识，方便识别，她只能组合使用或作为后代出现（.u-ipt.z-dis{}，.m-list li.z-sel{}），具体详见命名规则的扩展相关项。
+
+> 特殊：.j-将被专用于JS获取节点，请勿使用.j-定义样式。
+
+
+
+示例
+``` css
+<style>
+	/* 统一调用背景图 */
+	.m-logo a,.m-nav a,.m-nav em{background:url(images/sprite.png) no-repeat 9999px 9999px;}
+	/* 统一清除浮动 */
+	.g-bdc:after,.m-dimg ul:after,.u-tab:after{display:block;visibility:hidden;clear:both;height:0;overflow:hidden;content:'.';}
+	.g-bdc,.m-dimg ul,.u-tab{zoom:1;}
+	/* 布局 */
+	.g-sd{float:left;width:300px;}
+	/* 模块 */
+	.m-logo{width:200px;height:50px;}
+	/* 元件 */
+	.u-btn{height:20px;border:1px solid #333;}
+	/* 功能 */
+	.f-tac{text-align:center;}
+	/* 皮肤 */
+	.s-fc,a.s-fc:hover{color:#fff;}
+</style>
+```
+
+
+**布局（.g-）**
+
+| 语义	| 命名	| 简写|
+|  :----: | :----: | :---:  |
+| 文档	| doc	| doc|
+| 头部	| head	| hd|
+| 主体	| body	| bd|
+| 尾部	| foot	| ft|
+| 主栏	| main	| mn|
+| 主栏子容器	| mainc	| mnc|
+| 侧栏	| side	| sd|
+| 侧栏子容器	| sidec| 	sdc|
+| 盒容器	| wrap/box	| wrap/box|
+
+**模块（.m-）、元件（.u-）**
+
+| 语义	| 命名	| 简写|
+|  :----: | :----: | :---:  |
+| 导航	| nav	| nav|
+| 子导航	| subnav	| snav|
+| 面包屑	| crumb	| crm|
+| 菜单	| menu	| menu|
+| 选项卡	| tab	| tab|
+| 标题区	| head/title	| hd/tt|
+| 内容区	| body/content	| bd/ct|
+| 列表	| list	| lst|
+| 表格	| table	| tb|
+| 表单	| form	| fm|
+| 热点	| hot	| hot|
+| 排行	| top	| top|
+| 登录	| login	| log|
+| 标志	| logo	| logo|
+| 广告	| advertise	| ad|
+| 搜索	| search	| sch|
+| 幻灯	| slide	| sld|
+| 提示	| tips	| tips|
+| 帮助	| help	| help|
+| 新闻	| news	| news|
+| 下载	| download	| dld|
+| 注册	| regist	| reg|
+| 投票	| vote	| vote|
+| 版权	| copyright	| cprt|
+| 结果	| result	| rst|
+| 标题	| title	| tt|
+| 按钮	| button	| btn|
+| 输入	| input	| ipt|
+
+**功能（.f-）**
+
+| 语义	| 命名	| 简写|
+|  :----: | :----: | :---:  |
+| 浮动清除	| clearboth	| cb|
+| 向左浮动	| floatleft	| fl|
+| 向右浮动	| floatright	| fr|
+| 内联块级	| inlineblock	| ib|
+| 文本居中	| textaligncenter	| tac|
+| 文本居右	| textalignright	| tar|
+| 文本居左	| textalignleft	| tal|
+| 垂直居中	| verticalalignmiddle	| vam|
+| 溢出隐藏	| overflowhidden	| oh|
+| 完全消失	| displaynone	| dn|
+| 字体大小	| fontsize	| fs|
+| 字体粗细	| fontweight	| fw|
+
+**皮肤（.s-）**
+
+| 语义	| 命名	| 简写|
+|  :----: | :----: | :---:  |
+| 字体颜色	| fontcolor	| fc|
+| 	背景	| background	| bg|
+| 背景颜色	| backgroundcolor	| bgc|
+| 背景图片	| backgroundimage	| bgi|
+| 背景定位	| backgroundposition	| bgp|
+| 边框颜色	| bordercolor	| bdc|
+
+**状态（.z-）**
+
+| 语义	| 命名	| 简写|
+|  :----: | :----: | :---:  |
+| 选中	| selected	| sel|
+| 当前	| current	| crt|
+| 显示	| show	| show|
+| 隐藏	| hide	| hide|
+| 打开	| open	| open|
+| 关闭	| close	| close|
+| 出错	| error	| err|
+| 不可用	| disabled	| dis|
+
+
+## 3. 注释的写法 
 
 <!-- header -->
 <header>xxx</header>
 
 <!-- end header -->
 
-### id命名 
+## 4. id命名 
 
-#### (1)页面结构 
+### (1)页面结构 
 
 容器: container 
 页头：header 
@@ -3344,7 +3462,7 @@ var oSrc = oEvent.srcElement || oEvent.target;
 包裹层：wrapper 
 左右中：left right center 
 
-#### (2)导航 
+### (2)导航 
 
 导航：nav 
 主导航：mainnav 
@@ -3358,7 +3476,7 @@ var oSrc = oEvent.srcElement || oEvent.target;
 标题: title 
 摘要: summary 
 
-#### (3)功能 
+### (3)功能 
 标志：logo 
 广告：banner 
 登陆：login 
@@ -3388,7 +3506,7 @@ var oSrc = oEvent.srcElement || oEvent.target;
 友情链接：link 
 版权：copyright 
 
-### class的命名 
+## 5. class的命名 
 
 (1) 颜色:使用颜色的名称或者16进制代码,如 
 .red { color: red; } 
@@ -3412,8 +3530,8 @@ var oSrc = oEvent.srcElement || oEvent.target;
 2.尽量用英文; 
 3.尽量不缩写，除非一看就明白的单词.
 
-### css层次
-主要的 main.css
+## 6. css层次
+主要的 main.css/index.css
 模块 module.css 
 基本共用 base.css/global.css
 布局，版面 layout.css 
@@ -3422,6 +3540,78 @@ var oSrc = oEvent.srcElement || oEvent.target;
 文字 font.css 
 表单 forms.css 
 补丁 mend.css 
+
+## 7. css书写次序
+显示属性 -> 自身属性 -> 文本属性和其他修饰
+
+
+ | 显示属性	| 自身属性	| 文本属性和其他修饰|
+ |  :----: 	|   :----: 	| :---:             |
+ |	display	|margin	    |font               |
+ |visibility|padding	|text-align			|
+ |position  |width		|text-decoration	|
+ | 	float	|height		|vertical-align		|
+ |	clear	|border		|white-space		|
+ |list-style|overflow	|color				|
+ |	top 	|min-width	|background			|
+
+ - 显示属性： `display`, `visibility`, `position`, `top`, `float`, `clear`, `list-style`
+ - 自身属性： `margin`, `padding`, `width`, `height`, `border`, `overflow`, `min-width`
+ - 文本属性： `font`, `text-align`, `text-decoration`, `vertical-align`， `white-space`, `color`, `background`
+
+## 8. 媒体查询(media)屏幕宽度
+
+``` css
+
+<style>
+	/* 横屏 */
+	@media screen and (orientation:landscape){
+	    
+	}
+	/* 竖屏 */
+	@media screen and (orientation:portrait){
+	    
+	}
+	/* 窗口宽度<960,设计宽度=768 */
+	@media screen and (max-width:959px){
+	    
+	}
+	/* 窗口宽度<768,设计宽度=640 */
+	@media screen and (max-width:767px){
+	    
+	}
+	/* 窗口宽度<640,设计宽度=480 */
+	@media screen and (max-width:639px){
+	    
+	}
+	/* 窗口宽度<480,设计宽度=320 */
+	@media screen and (max-width:479px){
+	    
+	}
+	/* windows UI 贴靠 */
+	@media screen and (-ms-view-state:snapped){
+	    
+	}
+	/* 打印 */
+	@media print{
+	    
+	}
+</style>
+
+```
+
+## 9. js常见变量命名
+
+常见类型前缀
+- `o`  object 一个对象，一个元素 eg:oDiv
+- `a`  array  一组元素 eg:aLi
+- `s` string 字符串 eg:sUserName
+- `i` integer 整数 eg:iCount
+- `f`  float 浮点数 eg:fPrice
+- `b` boolean 布尔 eg:bOk
+- `fn` function 函数 eg:fnSucc(成功的回调函数)
+- `re` RegExp 正则 eg:reMailCheck
+
 
 ---
 #blog15(原生篇6) cookie、Require、数据交互前导
@@ -3505,6 +3695,10 @@ var oSrc = oEvent.srcElement || oEvent.target;
 
 [AMD 和 CMD 的区别有哪些? - 玉伯的回答 - 知乎](https://www.zhihu.com/question/20351507/answer/14859415)
 
+[前端模块化（CommonJs,AMD和CMD）](http://www.jianshu.com/p/d67bc79976e6)
+
+[详解JavaScript模块化开发](https://segmentfault.com/a/1190000000733959)
+
 ## 3. Require.js
 
 [RequireJS 中文网](http://www.requirejs.cn/)
@@ -3559,6 +3753,11 @@ r1.js
 ```
 
 #### (3)引用模块
+
+这里的模块依赖其实应该一开始就写好。
+
+![依赖前置](http://ojvx9eehr.bkt.clouddn.com/img/%E4%BE%9D%E8%B5%96%E5%89%8D%E7%BD%AE.PNG)
+
 ``` javascript
 <script>
 
@@ -3652,9 +3851,9 @@ r1.js
 缺点：(1)会刷新页面  (2)不能取出数据
 
 想要提交数据须有
-1. action 提交的地址 <form action=''></form>
-2. name   数据名称   <input name="user.tel" />
-3. value  数据       input.value
+1. action 提交的地址 `<form action=''></form>`
+2. name   数据名称   `<input name="user.tel" />`
+3. value  数据       `input.value`
 
 提交方式
 1. get(默认) 容量32K左右  不安全，有缓存
@@ -3704,8 +3903,345 @@ r1.js
 </script>
 ```
 
+将url的查询参数解析成字典对像
+``` javascript
+<script>
+	function getQueryObject(url) {
+		url = url == null ? window.location.href : url;
+		var search = url.substring(url.lastIndexOf("?") + 1);
+		var obj = {};
+		var reg = /([^?&=]+)=([^?&=]*)/g;
+		search.replace(reg, function(rs, $1, $2) {
+			var name = decodeURIComponent($1);
+			var val = decodeURIComponent($2);
+			val = String(val);
+			obj[name] = val;
+			return rs;
+		});
+		return obj;
+	}
+</script>
+```
+
 
 ---
-#blog16(Ajax jsonp)
+#blog16(ajax jsonp)
 ---
 
+## 1. Ajax前导
+### (1) XMLHttpRequest
+*兼容： 除IE6
+ie6 -> 报错
+
+### (2) readyState就绪状态
+- `0` uninitialized ajax  对象创建成功
+- `1` loading  打开连接(已经建立连接)
+- `2` loaded  发送数据
+- `3` interactive  下载内容
+- `4` complete  完成
+
+### (3) HTTP状态码
+**重点**
+- `200` ok
+- `304` not modified
+- `403` Forbidden
+- `404` Not found
+- `405` Not allowed
+- `414` Request-URI Too Long
+- `500` Internal Server Error
+- `502` Bad Gateway
+
+> 附：全部状态码
+'100': 'Continue',
+'101': 'Switching Protocols',
+'102': 'Processing',
+'200': 'OK',
+'201': 'Created',
+'202': 'Accepted',
+'203': 'Non-Authoritative Information',
+'204': 'No Content',
+'205': 'Reset Content',
+'206': 'Partial Content',
+'207': 'Multi-Status',
+'208': 'Already Reported',
+'226': 'IM Used',
+'300': 'Multiple Choices',
+'301': 'Moved Permanently',
+'302': 'Found',
+'303': 'See Other',
+'304': 'Not Modified',
+'305': 'Use Proxy',
+'307': 'Temporary Redirect',
+'308': 'Permanent Redirect',
+'400': 'Bad Request',
+'401': 'Unauthorized',
+'402': 'Payment Required',
+'403': 'Forbidden',
+'404': 'Not Found',
+'405': 'Method Not Allowed',
+'406': 'Not Acceptable',
+'407': 'Proxy Authentication Required',
+'408': 'Request Timeout',
+'409': 'Conflict',
+'410': 'Gone',
+'411': 'Length Required',
+'412': 'Precondition Failed',
+'413': 'Payload Too Large',
+'414': 'URI Too Long',
+'415': 'Unsupported Media Type',
+'416': 'Range Not Satisfiable',
+'417': 'Expectation Failed',
+'418': 'I\'m a teapot',
+'421': 'Misdirected Request',
+'422': 'Unprocessable Entity',
+'423': 'Locked',
+'424': 'Failed Dependency',
+'425': 'Unordered Collection',
+'426': 'Upgrade Required',
+'428': 'Precondition Required',
+'429': 'Too Many Requests',
+'431': 'Request Header Fields Too Large',
+'451': 'Unavailable For Legal Reasons',
+'500': 'Internal Server Error',
+'501': 'Not Implemented',
+'502': 'Bad Gateway',
+'503': 'Service Unavailable',
+'504': 'Gateway Timeout',
+'505': 'HTTP Version Not Supported',
+'506': 'Variant Also Negotiates',
+'507': 'Insufficient Storage',
+'508': 'Loop Detected',
+'509': 'Bandwidth Limit Exceeded',
+'510': 'Not Extended',
+'511': 'Network Authentication Required'
+
+
+### (4) ajax提交方式
+- GET 数据在open提交
+      载体：url
+
+- POST 数据在send提交
+	  载体：请求头(setRequestHeader)
+
+## 2. Ajax
+
+原生编写ajax.js
+
+``` javascript
+<script>
+	function ajax(json) {
+		// url, data, type, success, error, time, loading, complete
+		//路径，数据，方式，成功回调函数，失败回调函数，超时时间，等待动画，完成后的回调函数
+		// data数据格式为json
+
+		json = json || {};
+		if(!json.url) {
+			alert('url is null!');
+			return;
+		}
+
+		json.data = json.data || {};
+		json.type = json.type || 'get'; // 默认提交方式为GET
+		json.time = json.time || 3000;  // 默认超时时间为3000ms
+
+		var timer = null;
+		clearTimeout(timer);
+
+		// 1. 获得ajax
+		if(window.XMLHttpRequest) {  // 查看当前浏览器XMLHttpRequest是否是全局变量
+			var oAjax = new XMLHttpRequest();
+		} else {
+			var oAjax = new ActiveXObject('Microsoft.XMLHTTP');  // IE6，传入微软参数
+		}
+
+		switch(json.type.toLowerCase()) {
+			case 'get':
+				// 2. 打开地址
+				oAjax.open('GET', json.url + '?' + jsonToURL(json.data), true);  // 提交方式(大写)，url，是否异步
+				// 3. 发送数据
+				oAjax.send();
+				break;
+			case 'post':
+				// 2. 打开地址
+				oAjax.open('POST', json.url, true);  // 提交方式(大写)，url，是否异步
+				oAjax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');  // 设置请求头
+				// 3. 发送数据
+				oAjax.send(jsonToURL(json.data));
+
+		}
+
+		json.loading && json.loading();  // 执行等待动画
+
+		// 4. 接收数据
+		oAjax.onreadystatechange = function() {  // 监控状态
+			if(oAjax.readyState == 4) {
+				json.complete && json.complete();
+				if(oAjax.status >= 200 && oAjax.status < 300 || oAjax.status == 304) {
+					json.success && json.success(oAjax.responseText);  // 执行成功的回调函数，responseText为响应内容
+				} else {
+					json.error && json.error(oAjax.status);  // 执行失败的回调函数
+				}
+				clearTimeout(timer);
+			}
+		};
+
+		// 网络超时时执行
+		timer = null;
+		timer = setTimeout(function() {
+			console.log('请求超时');
+			oAjax.onreadystatechange = null;
+		}, json.time);
+
+	}
+
+	function jsonToUrl(json) {
+		var arr = [];
+		for(var name in json) {
+			arr.push(name + '=' + json[name]);
+		}
+		return arr.join('&');
+	}
+</script>
+```
+
+## 3. Ajax服务器相关
+- `oAjax.getAllResponseHeaders();`  获取ajax服务全部信息
+- `oAjax.getResponseHeader('xxx');`  获取ajax服务器相关信息
+
+## 4. Ajax2.0事件
+- `oAjax.onload`  替代`oAjax.onreadystatechange`
+- `oAjax.onerror`  发生错误(网络层级的错误才会触发)
+- `oAjax.onprogress`  上传进度(ev.loaded/ev.total)
+- `oAjax.onabort`  中断
+
+## 5. 关于锚点hash
+
+应用：刷新保留分页页码
+
+> cookie只有4k左右，此处应用hash保留分页页码
+
+``` css
+<style>
+	a{
+	    display: block;
+	    width: 50px;
+	    height: 50px;
+	    border:1px solid #000;
+	    text-align: center;
+	    line-height: 50px;
+	    text-decoration: none;
+	    float: left;
+	    margin:10px;
+	}
+	a:hover{
+	    background: #f60;
+	    color: #fff;
+	}
+	a.active{
+	    background: #f60;
+	    color: #fff;
+	}
+</style>
+```
+
+``` html
+	<a href="javascirpt:;" class="active">1</a>
+	<a href="javascirpt:;">2</a>
+	<a href="javascirpt:;">3</a>
+	<a href="javascirpt:;">4</a>
+	<a href="javascirpt:;">5</a>
+```
+
+``` javascript
+<script>
+	window.onload = function() {
+		var aA = document.getElementsByTagName('a');
+		var hash = window.location.hash;
+		var index = hash.substring(1);
+		if(hash) {
+			tab(index-1);
+		}
+
+		for (var i = 0; i < aA.length; i++) {
+			aA[i].index = i;
+			aA[i].onclick = function() {
+				var index = this.index;
+				tab(index);
+				window.location.hash = '#' + (this.index + 1);
+			};
+		}
+
+		function tab(index) {
+			for (var i = 0; i < aA.length; i++) {
+				aA[i].className = '';
+			}
+			aA[index].className = 'active';
+		}
+	};
+</script>
+```
+
+## 6. Ajax跨域
+**同源策略：Ajax只能同域名下取数据**
+
+**跨域需使用jsonp(json with padding)**
+
+[JavaScript跨域总结与解决办法](http://www.cnblogs.com/rainman/archive/2011/02/20/1959325.html)
+
+## 7. jsonp前导
+
+> **jsonp原理**
+动态创建script标签，利用script:src可以跨域的属性跨域
+
+> **HTML里面所有带src属性的标签都可以跨域，如iframe，img，script等。**
+
+**不需要服务器环境**
+
+**jsonp接口测试网址**
+www.asilu.com
+
+## 8. jsonp
+原生编写jsonp.js
+
+``` javascript
+<script>
+
+	function jsonp(json) {
+		// url, data, cbName, success
+		// 路径，参数，回调函数名字，回调函数
+
+		json = json || {};
+		if(!json.url) {
+			return;
+		}
+		json.data = json.data || {};
+		json.cbName = json.cbName || 'cb';  // 默认回调函数名字为cb，回调函数名一般为cb或callback
+
+		var fnNmae = 'jsonp_' + Math.random();
+		fnName = fnName.replace('.', '');  // 定义随机函数名，但名内不能包含.
+
+		// 全局函数防止与外部函数jsonp()重名
+		window[fnName] = function(json2) {
+			json.success && json.success(json2);
+			oHead.removeChild(oS);
+		};
+
+		json.data[json.cbName] = fnName;
+		var arr = [];
+		for(var name in json.data) {
+			arr.push(name + '=' + json.data[name]);
+		}
+
+		var oS = document.createElement('script');  // **动态创建script标签
+		var oHead = document.getElementsByTagName('head')[0];
+		oS.src = json.url + '?' + arr.join('&');  // 动态script的src属性为jsonp的路径
+		oHead.appendChild(oS);  // 插入到<head>标签最末
+	}
+
+</script>
+```
+
+
+---
+#blog17(jQuery)
+---

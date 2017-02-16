@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			background-color: black;
+			text-align: center;
+		}
+
+		canvas{
+			/*background-color: white;*/
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="600" height="400"></canvas>
+	<script>
+		var oC = document.querySelector('canvas');
+		var ctx = oC.getContext('2d');
+
+		var oImage = new Image();
+		oImage.src = 'statics/bear.png';
+
+		var count = 0;
+		var width = 200;
+		var height = 100;
+
+		oImage.onload = function() {
+			setInterval(function() {
+				ctx.clearRect(0, 0, oC.width, oC.height);
+
+				ctx.drawImage(oImage,
+					(count % 8) * width, 0, width, height,
+					200, 150, width, height
+				);
+
+				count++;
+			}, 60)
+		}
+	</script>
+</body>
+</html>
+
+
+

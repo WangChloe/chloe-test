@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			text-align: center;
+		}
+
+		canvas{
+			margin-top: 200px;
+			background-color: black;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="500" height="150"></canvas>
+	<script src="js/data.js"></script>
+	<script src="js/bird.js"></script>
+	<script>
+		var oC = document.querySelector('canvas');
+		var ctx = oC.getContext('2d');
+
+		var oImage = new Image();
+		oImage.src = 'statics/dinosaur.png';
+
+		var birdArray = [];
+
+		class RunDia{
+			constructor(props){
+				this.count = 0;
+				this.move();
+			}
+
+			draw(){
+				var {
+					x,y,w,h
+				} = RUN_DIA[this.count];
+
+				ctx.drawImage(oImage,
+					x,y,w,h,
+					30,10,w,h
+				)
+			}
+
+			move(){
+				setInterval(() => {
+					this.count++
+
+					if( this.count == 2 ){
+						this.count = 0;
+					}
+				},100)
+			}
+		}
+
+		class JumpDia{
+			constructor() {
+				
+				this.y = 50;
+				this.speed = -1;
+
+				this.move()
+				this.timer = null;
+			}
+
+			draw(){
+				var {
+					x,y,w,h
+				} = JUMP_DIA[0];
+
+				ctx.drawImage(oImage,
+					x,y,w,h,
+					30,this.y,w,h
+				)
+			}
+
+			move(){
+				this.timer = setInterval(() => {
+					this.y += this.speed;
+
+					if( this.y < 2 ){
+						this.speed *= -1
+					}
+
+					if( this.y > 50 ){
+						clearInterval(this.timer)
+					}
+				},16)
+			}
+		}
+
+		oImage.onload = function(){
+
+			var dia =  new RunDia();
+
+			setInterval(function(){
+				ctx.clearRect(0,0,oC.width,oC.height);
+
+				if( Math.random() < 0.003 ){
+					birdArray.push(new Bird())
+				}
+
+				birdArray.forEach(function(bird){
+					bird.draw();
+				})
+
+				dia.draw();
+			},16)
+
+			window.onkeydown = function({keyCode}){
+				if( keyCode == 32 || keyCode == 38 ){
+					dia = new JumpDia();
+				}
+			}
+		}
+	</script>
+</body>
+</html>

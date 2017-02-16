@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		html{
+			overflow: hidden;
+		}
+
+		body{
+			background-color: black;
+			text-align: center;
+		}
+
+		canvas{
+			/*background-color: white;*/
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="600" height="400"></canvas>
+	<script>
+		var oC = document.querySelector('canvas');
+		var ctx = oC.getContext('2d');
+
+		var oImage = new Image();
+		oImage.src = 'statics/2d-2.png';
+
+		var count = 0;
+		var size = 96;
+
+		var direction = 0;
+
+		var posX = 0;
+		var posY = 0;
+
+		var timer = null;
+
+		oImage.onload = function() {
+			setInterval(function() {
+				ctx.clearRect(0, 0, oC.width, oC.height);
+
+				ctx.drawImage(oImage,
+					(count % 4) * size, size * direction, size, size,
+					oC.width / 2 - size / 2 + posX, oC.height / 2 - size / 2 + posY, size, size
+				);
+
+				count++;
+			}, 80)
+		}
+
+		window.onkeydown = function({
+			keyCode
+		}) {
+			switch (keyCode) {
+				case 37:
+					direction = 1;
+					break;
+				case 38:
+					direction = 3;
+					break;
+				case 39:
+					direction = 2;
+					break;
+				case 40:
+					direction = 0;
+					break;
+				default:
+					;
+			}
+
+			clearInterval(timer);
+
+			timer = setInterval(function() {
+				switch (keyCode) {
+					case 37:
+						posX -= 1;
+						break;
+					case 38:
+						posY -= 1;
+						break;
+					case 39:
+						posX += 1;
+						break;
+					case 40:
+						posY += 1;
+						break;
+					default:
+						;
+				}
+			}, 16)
+		}
+
+		window.onkeyup = function() {
+			clearInterval(timer);
+		}
+	</script>
+</body>
+</html>
+
+
+

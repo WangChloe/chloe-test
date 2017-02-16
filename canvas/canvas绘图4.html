@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			background-color: black;
+			text-align: center;
+		}
+
+		canvas{
+			/*background-color: white;*/
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<canvas width="600" height="400"></canvas>
+	<script>
+		var oC = document.querySelector('canvas');
+		var ctx = oC.getContext('2d');
+
+		var oImage = new Image();
+		oImage.src = 'statics/coinAni2.png';
+
+		var count = 0;
+		var size = 60;
+
+		oImage.onload = function(){
+			setInterval(function(){
+				ctx.clearRect(0,0,oC.width,oC.height);
+
+				ctx.drawImage(oImage,
+					0,(count%10)*size,size,size,
+					oC.width/2 - size/2,oC.height/2 - size/2,size,size 
+				);
+
+				count++;
+			},40)
+		}
+	</script>
+</body>
+</html>
+
+
+
