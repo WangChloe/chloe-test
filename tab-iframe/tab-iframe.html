@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>tab-iframe</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="ti-container">
+        <header class="ti-header"></header>
+        <div class="ti-wrapper">
+            <div id="J_search_tab" class="search-tab fui-grid">
+                <a class="fui-span1 act" href="javascript:void(0);">返利</a>
+                <a class="fui-span1" href="javascript:void(0);">淘宝</a>
+                <a class="fui-span1" href="javascript:void(0);">百度</a>
+            </div>
+            <div id="J_search_box" class="search-box fui-grid">
+                <div class="J_search_info fanli baidu search-item act">
+                    <iframe src="https://m.baidu.com/" frameborder="0" scrolling="no"></iframe>
+                </div>
+                <div class="J_search_info taobao search-item">
+                    <iframe src="https://m.taobao.com/" frameborder="0" scrolling="no"></iframe>
+                </div>
+                <div class="J_search_info baidu search-item">
+                    <iframe src="https://m.baidu.com/" frameborder="0" scrolling="no"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-3.2.0.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

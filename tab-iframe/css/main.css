@@ -1,0 +1,32 @@
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td{margin:0;padding:0;}
+body{height:100%;text-align:center;}
+li{list-style:none;}
+a,a:link,a:visited,a:hover,a:active{color:#000;text-decoration:none;}
+:focus{outline:none;}
+img{width:100%;border:none; /*vertical-align: top;*/}
+.clearfix:after{content:"";display:block;clear:both;}
+.clearfix{zoom:1}
+
+.fl{float:left;}
+.fr{float:right;}
+.pointer{cursor:pointer;}
+
+.fui-grid{display:-webkit-box; -webkit-box-sizing:border-box; box-sizing:border-box;}
+.fui-span0{display:block; -webkit-box-flex:0;}
+.fui-span1{display:block; -webkit-box-flex:1;}
+.fui-span2{display:block; -webkit-box-flex:2;}
+.fui-span3{display:block; -webkit-box-flex:3;}
+
+.ti-container{font-size:.26rem;}
+.ti-header{margin-bottom:.5rem;height:3rem; background: #ccc;}
+.ti-wrapper{padding:.3rem;}
+.ti-wrapper .search-tab{margin-bottom:.2rem;}
+.ti-wrapper .search-tab a{width:2rem;border:1px solid #ccc;}
+.ti-wrapper .search-tab a.act{background:#666; color:#fff;}
+.ti-wrapper .search-box{overflow: hidden;}
+.ti-wrapper .search-box .search-item{display:none;width:6.9rem; height: 2.5rem;}
+.ti-wrapper .search-box .search-item.baidu{margin-top:-1.18rem;height: 1.65rem;}
+.ti-wrapper .search-box .search-item.baidu.cl{margin-top:-.02rem;height: .49rem;}
+.ti-wrapper .search-box .search-item.taobao{height: .37rem;}
+.ti-wrapper .search-box .search-item.act{display:block;}
+.ti-wrapper .search-box .search-item iframe{width:100%;height:100%;}
