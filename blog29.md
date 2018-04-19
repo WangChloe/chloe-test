@@ -256,7 +256,7 @@ x<0 左偏移
 y>0 下偏移
 y<0 上偏移
 
-`transform: translate(-30px, -40px);` 左偏移30px, 右偏移40px
+`transform: translate(-30px, -40px);` 左偏移30px, 上偏移40px
 `transform: translateX|Y|Z(-30px);`
 
 - scale(s); 放大/缩小

@@ -693,7 +693,7 @@ clearTimeout(定时器的名字);
 <script>
 	// 设置时间
 	var oDate = new Date();
-	oDate.setFulllYear(2017, 11, 13);	// 设置年、月、日  月份设置时-1
+	oDate.setFullYear(2017, 11, 13);	// 设置年、月、日  月份设置时-1
 	oDate.setHours(0, 0, 0, 0);			// 设置时、分、秒、毫秒
 
 	// 获得时间戳

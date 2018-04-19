@@ -5,6 +5,8 @@
     - \(1\) viewport设置
     - \(2\) 移动端布局（PC同样适用）
     - \(3\) 移动端事件
+- 3. 移动端常用库
+    - \(1\) fastclick.js - 解决移动端click事件延迟
 
 <!-- /MarkdownTOC -->
 
@@ -913,4 +915,24 @@ document.documentElement.style.fontSize = (clientWidth/320(设备宽度))*10(根
         return parseInt(Math.random() * (m - n) + n);
     }
 </script>
+```
+
+## 3. 移动端常用库
+
+### (1) fastclick.js - 解决移动端click事件延迟 
+``` javascript
+    <script src="libs/zepto/zepto.js"></script>
+    <script src="libs/zepto/touch.js"></script>
+    <script src="libs/fastclick.js"></script>
+    <script>
+        FastClick.attach(document.body);
+
+        $('.block').click(function(){
+            console.timeEnd();
+        })
+
+        $('.block').on('touchstart',function(){
+            console.time()
+        })
+    </script>
 ```
