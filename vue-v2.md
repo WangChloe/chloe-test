@@ -2,20 +2,39 @@
 
 - 指令
     - 渲染层次
+        - 声明式渲染
+        - 条件渲染
     - 所有指令
+        - v-model
+            - v-model修饰符
+        - v-bind
+        - v-if \(应用场景：条件不常改变\)
+        - v-show \(应用场景：频繁切换\)
+        - v-for
+        - v-on 事件绑定
     - 重要缩写
     - 自定义指令
+        - 自定义指定传参
+        - 自定义指令应用于标签
 - 过滤器
     - 自定义过滤器
 - 动画
 - 事件
     - 事件修饰符
+        - v-on修饰符
 - 监听
 - 组件
     - 注册组件
     - 参数
+        - props
+        - data
     - 组件API
+        - Vue 组件的 API 来自三部分 - props, events 和 slots ：
     - 组件通信
+        - props
+            - props是单向绑定
+            - 子组件 -> 父组件
+        - 子组件索引
 - vue构造器
 - 实例的生命周期
 
@@ -130,7 +149,7 @@ vm.pick === vm.a
 
 - .lazy
 
-在 "change" 而不是 "input" 事件中更新
+在 "change" 而不是 "input" 事件中更新，只有在input输入框发生一个blur时才触发
 <input v-model.lazy="msg" >
 
 - .number
