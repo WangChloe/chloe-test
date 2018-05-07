@@ -1,20 +1,24 @@
 <!-- MarkdownTOC -->
 
 - 声明变量
-    - let
-        - let声明的变量只在当前代码块内有效
-        - for循环变量为副作用域，循环内部为子作用域，let范围不冲突不交叉
-        - 不存在变量提升
-        - 暂时性死区
-        - 不允许重复声明
-    - const
-    - ES5 & ES6 声明变量
-        - 顶层对象 & 全局变量
-    - global对象
-        - 顶层对象
-        - this变量
-        - 引入global作为顶层对象
+  - let
+    - let声明的变量只在当前代码块内有效
+    - for循环变量为副作用域，循环内部为子作用域，let范围不冲突不交叉
+    - 不存在变量提升
+    - 暂时性死区
+    - 不允许重复声明
+  - const
+    - 应用场景
+  - ES5 & ES6 声明变量
+    - 顶层对象 & 全局变量
+  - global对象
+    - 顶层对象
+    - this变量
+    - 引入global作为顶层对象
 - 变量的解构赋值
+  - 默认值
+  - 对象的解构赋值
+  - class类
 
 <!-- /MarkdownTOC -->
 
@@ -206,6 +210,13 @@ a.length = 0;  // 可定义属性
 a = ['Chloe'];  // 报错，不能指向另一个数组
 ```
 
+### 应用场景
+
+引用第三方库的时声明的变量，用const来声明可以避免未来不小心重命名而导致出现bug。
+
+```
+const monent = require('moment')
+```
 
 ## ES5 & ES6 声明变量
 
@@ -278,10 +289,83 @@ var getGlobal = function () {
 
 ```
 let [a, b, c] = [1, 2, 3];
+
+let [x, , y] = [1, 2, 3];
+x // 1
+y // 3
+
+let [head, ...tail] = [1, 2, 3, 4];
+head // 1
+tail // [2, 3, 4]
+
+
+let [x, ,y, ...z] = ['a'];
+x // "a"
+y // undefined
+z // []
+
+let [a, [b], [d]] = [1, [2, 3], 4];
+a // 1
+b // 2
+d // 4
+```
+
+## 默认值
+
+> ES6 内部使用严格相等运算符（===），判断一个位置是否有值。所以，只有当一个数组成员严格等于undefined，默认值才会生效。
+
+
+```
+let [x, y = 'b'] = ['a', undefined]; // x='a', y='b'
+
+let [x = 1] = [undefined]; // x=1
+
+let [x = 1] = [null]; // x=null
 ```
 
 
 
+## 对象的解构赋值
+
+> 对象的属性没有次序，变量必须与属性同名，才能取到正确的值。
+
+```
+let { bar, foo } = { foo: "aaa", bar: "bbb" };
+foo // "aaa"
+bar // "bbb"
+
+let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
+baz // "aaa"
+foo // foo is not defined 
+```
+
+> 解构赋值的内部机制：先找到同名属性，然后再赋给对应的变量。真正被赋值的是baz而不是foo。
+
+## class类
+
+```
+class Animal {
+    constructor(){
+        this.type = 'animal'
+    }
+    says(say){
+        console.log(this.type + ' says ' + say)
+    }
+}
+
+let animal = new Animal()
+animal.says('hello') //animal says hello
+
+class Cat extends Animal {
+    constructor(){
+        super()
+        this.type = 'cat'
+    }
+}
+
+let cat = new Cat()
+cat.says('hello') //cat says hello
+```
 
 
 
