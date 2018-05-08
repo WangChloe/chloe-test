@@ -1,9 +1,17 @@
 <!-- MarkdownTOC -->
 
+- 数据类型
+  - Symbol
+- 数据结构
+  - Map
+    - WeakMap
+  - Set
+    - WeakSet
 - 声明变量
   - let
     - let声明的变量只在当前代码块内有效
     - for循环变量为副作用域，循环内部为子作用域，let范围不冲突不交叉
+      - 字符串遍历器
     - 不存在变量提升
     - 暂时性死区
     - 不允许重复声明
@@ -15,16 +23,133 @@
     - 顶层对象
     - this变量
     - 引入global作为顶层对象
-- 变量的解构赋值
+- destructuring 解构赋值
+  - 数组的解构赋值
   - 默认值
   - 对象的解构赋值
-  - class类
+  - 应用
+- class类
+- arrow function 箭头函数
+- \`\` template string 模版字符串
+- Spread 扩展运算符 ...
+- default reset
+  - default
+    - reset
+- import export
+  - es5
+  - es6
+- proxy & reflect
+  - Proxy
+  - Reflect
+- Promise
+- for...of循环
 
 <!-- /MarkdownTOC -->
 
+# 数据类型
 
-let, const, class, extends, super, arrow functions, template string, destructuring, default, rest arguments
+## Symbol
 
+- 独一无二的值
+
+```
+let a1 = Symbol();
+let a2 = Sybmol();
+
+console.log(a1 === a2); //false
+
+let a3 = Sybmol.for('a3');
+let a4 = Sybmol.for('a3');
+
+console.log(a3 === a4); // true
+```
+
+# 数据结构
+
+## Map
+
+>  键值对集合，键的范围不限于字符串
+
+- `map.size`
+
+- `map.has('xxx')`
+
+- `map.get('xxx')`
+
+- `map.set(arr, 'xxx')`
+
+- `map.delete('xxx')`
+
+- `map.clear()`
+
+```
+const map = new Map([
+  ['name', 'Chloe']，
+  ['title', 'Author']
+  ]);
+
+map.size // 2
+map.has('name') // true
+map.get('name') // Chloe
+map.has('title') // true
+map.get('title') // Author
+
+let map2 = new Map();
+let arr = ['123'];
+map2.set(arr, '456');
+console.log(map2, map2.get(arr)); // {["123"] => "456"}  "456"
+```
+
+### WeakMap
+
+- WeakMap只接受对象作为键名
+
+- 没有clear方法
+
+## Set
+
+- 类似数组，但是成员的值都是唯一的，没有重复的值。
+
+```
+let arr1 = [1, 2, 3 ,1];
+
+let list3 = new Set(arr1);
+
+console.log(list3); // {1, 2, 3, 4}
+console.log(list3.size); // 4
+```
+
+- `list.size`
+
+- `list.add(xxx)` 添加值，返回Set解构本身
+
+- `list.delete(xxx)` 删除值，返回是否删除成功的boolean
+
+- `list.has(xxx)` 该值是否为Set的成员，返回一个boolean
+
+- `list.clear()` 清除所有成员，没有返回值
+
+
+- 遍历
+
+```
+let arr = ['add', 'delete', 'clear'];
+let list = new Set(arr);
+
+for(let key of lists.leys()) {
+  console.log(key);
+}
+
+list.forEach(function(item) {
+  console.log(item)
+  })
+```
+
+### WeakSet
+
+- WeakSet成员只能是对象
+
+- 没有clear方法
 
 # 声明变量
 
@@ -78,6 +203,16 @@ for(let i = 0; i < 3; i++) {
 //abc
 //abc
 //abc
+```
+
+#### 字符串遍历器
+
+```
+let str = 'abc';
+
+for(let code of str) {
+  console.log('es6', code); // abc
+}
 ```
 
 ### 不存在变量提升
@@ -283,9 +418,12 @@ var getGlobal = function () {
 };
 ```
 
-# 变量的解构赋值
+# destructuring 解构赋值
 
 从数组和对象中提取值，对变量进行赋值。
+
+
+## 数组的解构赋值
 
 ```
 let [a, b, c] = [1, 2, 3];
@@ -341,10 +479,41 @@ foo // foo is not defined
 
 > 解构赋值的内部机制：先找到同名属性，然后再赋给对应的变量。真正被赋值的是baz而不是foo。
 
-## class类
+
+```
+// es5
+let cat = 'ken'
+let dog = 'lili'
+let zoo = {cat: cat, dog: dog}  // {cat: 'ken', dog: 'lili'}
+
+// es6
+let cat = 'ken'
+let dog = 'lili'
+let zoo = {cat, dog} // {cat: 'ken', dog: 'lili'}
+```
+
+## 应用
+
+- 变量交换
+
+```
+{
+  let a = 1;
+  let b = 2;
+  [a, b] = [b, a];
+  console.log(a, b); // 2 1
+}
+```
+
+# class类
+
+- extends
+
+- super()
 
 ```
 class Animal {
+  // 构造方法
     constructor(){
         this.type = 'animal'
     }
@@ -356,8 +525,10 @@ class Animal {
 let animal = new Animal()
 animal.says('hello') //animal says hello
 
+// 继承
 class Cat extends Animal {
     constructor(){
+        // 父类的实例方法，继承父类的this对象，不在constructor中使用this则不必调用super()
         super()
         this.type = 'cat'
     }
@@ -368,26 +539,383 @@ cat.says('hello') //cat says hello
 ```
 
 
+# arrow function 箭头函数
+
+```
+// es5
+function(i) {
+  return i + 1;
+}
+
+// es6
+(i) => i + 1
+
+// es5
+function(x, y) {
+  x++;
+  y--;
+  return x + y;
+}
+
+// es6
+(x, y) => { x++; y--; return x+y}
+
+// es5
+var foo = function(a, b) {
+  return a * b;
+}
+
+// es6
+let bar = (a, b) => a * b;
+```
+
+- 数组应用
+
+```
+let arr = [ 5, 6, 7, 8, 'a' ];
+let b = arr.map( item => item + 3 );
+console.log(b); // [ 8, 9, 10, 11, 'a3' ]
+```
+
+- 处理this
+
+> 原理：箭头函数没有自己的this，他的this是继承外面的，因此内部的this就是外层代码块的this。
+
+```
+class Animal {
+    constructor(){
+        this.type = 'animal'
+    }
+    says(say){
+        setTimeout( () => {
+            console.log(this.type + ' says ' + say)
+        }, 1000)
+    }
+}
+
+var animal = new Animal()
+animal.says('hi')  //animal says hi
+```
 
 
+# \`\` template string 模版字符串
+
+- \` 模版字符串 包裹字符串及变量
+
+- `${xxx}` 引用变量
+
+```
+var fName = 'Peter', sName = 'Smith', age = 43, job = 'photographer';
+var a = 'Hi, I\'m ' + fName + ' ' + sName + ', I\'m ' + age + ' and work as a ' + job + '.';
+var b = `Hi, I'm ${ fName } ${ sName }, I'm ${ age } and work as a ${ job }.`;
+
+$("#result").append(`
+  There are <b>${basket.count}</b> items
+   in your basket, <em>${basket.onSale}</em>
+  are on sale!
+`);
+```
+
+# Spread 扩展运算符 ...
 
 
+- 将多个参数合并到一个数组中
+
+```
+console.log(...[1,2,3]); // 1 2 3
+
+let a = [3, 4, 5];
+let b = [1, 2, ...a, 6];
+console.log(b);  // [1, 2, 3, 4, 5, 6]
+
+function foo(a, b, c) { console.log(`a=${a}, b=${b}, c=${c}`)}
+let data = [5, 15, 2];
+foo( ...data); // a=5, b=15, c=2
+```
+
+- 将数组或对象分散到新的数组或对象中
+
+```
+let a = [1, 2, 3];
+let b = [ ...a ];
+let c = a;
+b.push(4);
+console.log(a);  // [1, 2, 3]
+console.log(b);  // [1, 2, 3, 4] referencing different arrays
+c.push(5);
+console.log(a);  // [1, 2, 3, 5]
+console.log(c);  // [1, 2, 3, 5] referencing the same array
+```
+ 
+# default reset
+
+## default
+
+```
+// es5
+function animal(type) {
+  type = type || 'cat'
+  console.log(type)
+}
+
+// es6
+function animal(type = 'cat') {
+  console.log(type);
+}
+```
+
+### reset
+
+- `...变量名` 获取函数的多余参数
+
+- 参数变量是一个数组，该变量将多余的参数放入数组中
+
+```
+function animals(...types) {
+  console.log(type)
+}
+
+animals('cat', 'dog', 'fish') // ["cat", "dog", "fish"]
+```
+
+# import export
+
+- es5 
+  - 服务器端 CommonJS
+  - 浏览器端 AMD(eg:require.js)
+
+- es6
+  - module功能
+
+## es5
+
+- require.js
+
+```
+// content.js
+define('content.js', function() {
+  return 'A cat'
+  })
+
+// index.js
+require(['./content.js'], function(animal) {
+  console.log(animal); // A cat
+  })
+```
+
+- CommonJS
+
+```
+// index.js
+var animal = require('./content.js')
+
+// content.js
+module.exports = 'A cat'
+```
+
+## es6
+
+```
+// index.js
+import animal from './content'
+
+// content.js
+export default 'A cat'
+```
+
+# proxy & reflect
+
+## Proxy
+
+```
+let obj = {
+  name:'gao',
+  time:'2017-08-13',
+  emp:'123'
+}
+
+let temp = new Proxy(obj, {
+  get(target, key) {
+    return target[key].replace('2017', '2018');
+  }, {
+  set(target, key, value) {
+    if(key === 'name') {
+      return target[key] = value;
+    } else {
+      return target[key];
+    }
+  },
+  deleteProperty(target, key) {
+    if(key.indexOf('i') > -1) {
+      delete target[key];
+      return true;
+    } else {
+      return target[key];
+    }
+  },
+  ownKeys(target) {
+    return Object.keys(target).filter(item=>item!='name');
+  }
+})
+
+console.log('get',temp.time);  //get 2018-08-13
+
+temp.time = '2018';
+console.log('set',temp.name,temp); //set gao   {name: "gao", time: "2017-08-13", temp: "123"}
+
+temp.name = 'he';
+console.log('set',temp.name,temp); // set he  {name: "he", time: "2017-08-13", temp: "123"}
+
+console.log('has','name' in temp,'time' in temp);  //has true false
+
+delete temp.time;
+console.log('delete',temp);   //delete  {name: "he", temp: "123"}
+```
+
+## Reflect
+
+> 不管Proxy怎么修改默认行为，总可以在Reflect上获取默认行为。
 
 
+```
+let obj = {
+  name:'gao',
+  time:'2017-08-13',
+  emp:'123',
+}
+
+console.log('reflect get',Reflect.get(obj, 'name'));  // reflect get gao
+Reflect.set(obj,'name','hexaiofei');
+console.log(obj);  // {name: "hexaiofei", time: "2017-08-13", emp: "123"}
+console.log('reflect has', Reflect.has(obj,'name'));  //reflect has true
+```
+
+# Promise
+
+>  异步编程解决方案
+
+- 三种状态
+  - Pending(进行中)
+  - Fulfilled(已成功)
+  - Rejected(已失败)
+
+- Resolved(已定型)
+  - Pending -> Fulfilled
+  - Pending -> Rejected
 
 
+- Promise构造函数接受一个函数作为参数，该函数的两个参数分别是resolve(必写)和reject(可选)
+  - resolve (Pending -> Resolved) 未完成->成功
+  - reject (Pending -> Rejected) 未完成->失败
+
+> Promise实例生成以后，可以用then方法分别指定Resolved状态和Rejected状态的回调函数。
+
+```
+// ES5回调函数
+let ajax = function(callback) {
+  console.log('hello');
+  setTimeout(funciton(){
+    callback && callback()
+    }, 1000)
+}
+
+ajax(function(){
+  console.log('timeout1');
+  })
+
+// ES6 Promise
+let ajax = function() {
+  console.log('say');
+  return new Promise((resolve, reject) => {
+    setTimeout(function(){
+      resolve();
+    }, 1000);
+  });
+}
+
+// Promise实例生成以后，可以用then方法分别指定Resolved状态和Rejected状态的回调函数。
+ajax().then(function() {
+  console.log('promise', 'timeout1');
+})
+
+```
+
+- promise用法
+
+```
+promise.then(function(value) {
+  // success
+}, function(error) {
+  // failure
+});
+```
 
 
+- promise对象回调处理详解
+
+```
+console.log('我是顺序运行的1号');
+
+//回调测试1，带promise实例化时的参数
+function test1(value){
+    console.log('回调测试1')
+    return value
+}
+
+//回调测试2，不带promise实例化时的参数
+function test2(){
+    console.log('回调测试2')
+    return arguments[0]
+}
+
+//创造了一个Promise实例
+let p = new Promise(function (resolve, reject) {
+    console.log('创造了一个Promise实例');
+    //异步操作成功时调用，并将异步操作的结果，作为参数传递出去
+    resolve(666);
+});
+console.log('我是顺序运行的2号');
 
 
+//方法一：最简便的,拿到的是创造Promise实例时给resolve的参数
+p.then(function(result) {
+  // success
+  console.log('方法一回调成功结果是:'+result)
+}, function(error) {
+  // failure
+  console.log('failure1:'+error)
+});
+
+//方法二：先执行指定的函数再回调，test1这时就是resovle,所以参数是666
+p.then(test1)
+ .then(function (result) {
+    console.log('方法二回调成功结果是:' + result);
+}, function(error) {
+  // failure
+  console.log('failure2:'+error)
+});
+
+//方法三：先执行指定的函数再回调，test1这时就是resovle,所以默认参数是arguments里面也有666
+p.then(test2)
+ .then(function (result) {
+    console.log('方法三回调成功结果是:' + result);
+}, function(error) {
+  // failure
+  console.log('failure3:'+error)
+});
+console.log('我是顺序运行的3号');
+```
+
+![](https://img-blog.csdn.net/20180309104556172?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYTQxOTQxOQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 
 
+# for...of循环
 
+```
+let a = ['a', 'b', 'c', 'd'];
 
-
-
-
-
-
-
-
+for(var val of a) {
+  console.log(val);
+}
+// "a" "b" "c" "d"
+```
