@@ -2,12 +2,17 @@
 
 - blog1
 	- 1. js六大数据类型
+		- 基本数据类型
+		- 复杂数据类型
 	- 2. 数据类型补充
 	- 3. 数字相关判断方法
 	- 4. 变量
 	- 5. 运算符
 	- 6. 常见变量命名前缀
 	- 7. 字符串转化为数字
+		- parseInt\(\)
+		- parseFloat\(\)
+		- Number\(\)
 	- 8. 数字转化为字符串
 	- 9. if语句变形
 	- 10. **js**及**事件**的笼统概念
@@ -19,6 +24,7 @@
 	- 5. 循环添加事件，事件中的循环变量不能用
 	- 6. 浏览器加载的过程
 	- 7. DOM获取元素方法
+			- 兼容写法
 	- 8. js中的真假
 	- 9. 获取元素当前样式\(兼容\)
 	- 10. 获取一个n~m之间的随机数\(n<m，且不包括m\)
@@ -28,10 +34,19 @@
 	- 3. eval\(字符串\)
 	- 4. 数字小于10的补零函数
 	- 5. 定时器
+		- \(1\) Interval\(每过一段时间执行一次，循环执行\)
+		- \(2\) Timeout\(过一段时间执行一次，只执行一次\)
 	- 6. 日期对象
 	- 7. 日期对象应用
+		- 本月有多少天
+		- 本月第一天是周几
+		- 本月最后一天是周几
+		- 倒计时
 	- 8. 事件函数相同可以合并
 	- 9. this
+		- \(1\) 定时器中的this不指向元素，指向window
+		- \(2\) 调用封装函数使用this，this不指向元素，指向window
+		- \(3\) 低级浏览器attachEvent)事件绑定里面的this 报错
 	- 10. 闭包
 - blog4
 	- 1. 参数的数组arguments
@@ -39,9 +54,16 @@
 	- 3. 字符串的相关方法
 	- 4. 字符串比较
 	- 5. 字符串应用
+		- 判断浏览器的类型
+		- 判断上传文件格式
 	- 6. 定义数组
 	- 7. 数组的相关方法
 	- 8. json\(object类型\)
+		- json和数组的区别
+			- length
+			- 循环遍历方法
+		- 访问元素下标类型
+			- 顺序
 	- 9. Math方法
 	- 10. try-catch捕获异常
 - blog5\(数组应用\)
@@ -51,18 +73,32 @@
 	- 4. 数组排序方法
 	- 5. 数组内查找元素是否存在
 	- 6. 数组去重的多种方法
+		- \(1\)findInArr
+		- \(2\)json\(自动从小到大排序\)
+		- \(3\)sort\(\)
+		- \(4\) indexOf
+		- \(5\)二分法
+		- \(6\)Map\(ES6\)
+		- \(7\)Set\(ES6\)
 	- 补一个字符串的应用
+		- \(1\) 字符串中出现次数最多的字符
 - blog6
 	- 1. select下拉框的相关属性
 	- 2. 预解析
 	- 3. 已知计算机编码查看对应单词
 	- 4. 字节长度和编码的关系
+		- 封装一个求字节长度的函数
 	- 5. 严格模式
 	- 6. 连等及逗号运算符
+		- 连等
+		- 逗号运算符
 	- 7. 文本提示框
 	- 8. form表单
 - blog7\(js组成\)
 	- 1. js实现的组成
+		- ECMA
+		- DOM
+		- BOM
 	- 2. DOM节点关系
 	- 3. DOM节点操作
 	- 4. DOM属性操作
@@ -84,10 +120,13 @@
 	- 5. 事件解绑
 	- 6. 查看鼠标点击位置
 	- 7. 键盘事件
+		- 键码 `oEvent.keyCode`
 	- 8. 鼠标事件
+		- 判断滚动方向
 	- 9. domReady
 	- 10. 事件委托
 	- 11. 事件源
+		- 给子级循环添加事件 闭包的替代写法 -> 委托
 - blog10\(原生运动框架\)
 	- move.js
 - blog11\(move框架应用\) \(上\)
@@ -108,9 +147,14 @@
 	- 13. 仿Mac 感应变大效果
 - blog14\(前端规范\)
 	- 1. Reset.css && Normailze.css
+		- Reset
+		- Normailze
 	- 2. css命名规范
 	- 3. 注释的写法
 	- 4. id命名
+		- \(1\)页面结构
+		- \(2\)导航
+		- \(3\)功能
 	- 5. class的命名
 	- 6. css层次
 	- 7. css书写次序
@@ -118,18 +162,31 @@
 	- 9. js常见变量命名
 - blog15\(原生篇6\) cookie、Require、数据交互前导
 	- 1. cookie
+		- 封装cookie.js
 	- 2. 模块化
+		- sea.js && require.js
 	- 3. Require.js
+			- \(1\)定义模块
+			- \(2\)使用模块
+			- \(3\)引用模块
+		- Require的使用结构一般如下
 	- 4. 数据交互
+		- form提交数据
+		- ajax\(Asynchronous JavaScript and XML，异步JavaScript和XML\)
 	- 5. eval的替代用法
 	- 6. 数据交互时输入中文问题
 - blog16\(ajax jsonp\)
 	- 1. Ajax前导
+		- \(1\) XMLHttpRequest
+		- \(2\) readyState就绪状态
+		- \(3\) HTTP状态码
+		- \(4\) ajax提交方式
 	- 2. Ajax
 	- 3. Ajax服务器相关
 	- 4. Ajax2.0事件
 	- 5. 关于锚点hash
 	- 6. Ajax跨域
+		- js跨域请求方式
 	- 7. jsonp前导
 	- 8. jsonp
 	- 9. 跨浏览器的CORS
@@ -137,24 +194,41 @@
 	- 1. jQuery && js
 	- 2. jQuery效果
 	- 3. jQuery选择器
+		- \(1\) 伪类选择器
+		- \(2\) 属性选择器
 	- 4. jQuery操作css属性
 	- 5. jQuery操作内容
 	- 6. jQuery操作类名
 	- 7. jQuery操作属性
 	- 8. jQuery DOM
+		- \(1\) 创建元素
+		- \(2\) 添加元素
+		- \(3\) 删除元素
 	- 9. jQuery事件
+		- 事件相关
+		- 事件委托
 - blog18\(jQuery下\)
 	- 1. jQuery获取物体信息
+		- js
+		- jQuery\(只封装了以下方法\)
 	- 2. jQuery筛选
+		- \(1\) 过滤
+		- \(2\) 查找
 	- 3. jQuery  js
+		- \(1\) 原生js转jQuery对象
+		- \(2\) jQuery转原生js对象
 	- 4. jQuery链式运动
 	- 5. jQuery循环
 	- 6. jQuery工具
 	- 7. jQuery Ajax
 	- 8. jQuery jsonp
 	- 9. jQuery插件
+		- 写插件
+		- 一个插件
+		- 一组插件
 - blog19\(正则\)
 	- 1. 正则表达式
+		- RegExp对象
 	- 2. 正则定义的多种方法
 	- 3. 正则校验
 	- 4. 正则使用的字符串相关方法
@@ -176,64 +250,243 @@
 - blog21\(性能优化\)
 	- 1. 性能优化
 	- 2. 重排 && 重绘
+		- \(1\) 重排\(reflow\)
+		- \(2\) 重绘
 	- 3. 图层
 	- 4. 执行性能优化
 	- 5. 网络性能优化
+		- 查看网络性能 F12 -> network
+			- 工具
+		- 网络性能提升方法
 	- 6. 垃圾回收 GC\(Gabage Collection\)
 	- 7. 递归
 - blog22\(面向对象\)
 	- 1. 面向对象
+		- \(1\) 对象组成
+		- \(2\) 面向对象特征
+		- \(3\) 对象相关方法
+			- 执念
 	- 2. 引用类型
+		- Array.sum实现原理
+		- Array.forEach实现原理
+		- Array.every实现原理
+		- Array.some原理
+		- Array.map原理
+		- Array.reduce原理
+		- Function.bind原理
 	- 3. 创建对象前导
+		- \(1\) 关于new
+		- \(2\) 关于this
+			- 强制改变this指向
 - blog23\(面向对象 中\)
 	- 4. 创建对象
+		- \(1\) 工厂模式
+		- \(2\) 单例模式
+		- \(3\) 构造函数模式
+		- \(4\) 原型模式
+			- 重写prototype将导致实例的constructor转向
+		- \(5\) 构造+原型
 	- 5. 原型与原型链
+		- 关于原型
+		- 关于原型链
 	- 6. 原型应用
+		- \(1\) 数组arr.indexOf\(\)兼容问题
+		- \(2\) 字符串str.trim\(\)兼容问题
 - blog24\(面向对象 下\)
 	- 7. 如何编写面向对象程序
 	- 8. 面向对象：继承
+		- 实例：自动播放选项卡\(继承\)
 	- 9. 解决变量名冲突的多种方法
 	- 10. 伪数组问题
 	- 11. js的冒泡\(Bubbling Event\)和捕获\(Capture Event\)的区别
+		- 阻止冒泡
+		- 阻止捕获
 	- 12. 如何写一个自己的框架
+		- 仿写jQuery要点回顾
+		- Chloe.js仿写部分jQuery功能
 - blog25 \(算法与数据结构\)
 	- 1. 查找算法
+		- 以有序数组查找定值为例
+			- \(1\) 线性查找
+			- \(2\) 二分法查找
+				- 二分法应用
 	- 2. 排序算法
+		- \(1\) 交换排序
+			- 冒泡排序
+			- 快速排序
+		- \(2\) 选择排序
+			- 直接选择
+			- 堆排序
+		- \(3\) 归并排序
 	- 3. 数据结构
+		- \(1\) 有序数组
+		- \(2\) 无序数组
+		- \(3\) 二叉树
+		- \(4\) 队列
+		- \(5\) 堆栈
+		- \(6\) 散列
 - blog 26 \(代码管理与常见命令\)
 	- 1. svn代码版本管理工具
 	- 2. git分布式版本控制系统
+		- 工作区
+		- 缓存区
+		- 本地仓库
+		- 服务器仓库
+		- 其他
+		- reset的两种用法
+		- reset命令的3种方式
 	- 3. git的使用姿势
+		- \(1\) 本地代码放到github上
+		- \(2\) 服务器仓库已有项目
+		- 多人合作
+		- 关于SSH配置
 	- 4. git与svn的区别
 	- 5. 常用命令
+		- DOS
+		- Linux
+			- 编辑文件
+		- Node.js
 	- 6. 常用快捷键
+		- Windows
+		- Firebug
+		- 调试
+		- Sublime
+		- Emmet
 - blog27 \(HTML5\)
 	- HTML5语法概要
 	- 1. H5新增元素
+		- \(1\) 结构元素
+			- section
+			- article
+			- aside
+			- nav
+			- figure
+			- time
+			- pubdate
+			- header
+			- footer
+			- hgroup
+			- address
+			- 整体应用
+		- \(2\) 其他元素
+			- video
+			- audio
+			- canvas
+			- meter
+			- progress
+			- details summary
+			- ...
+		- \(3\) input元素类型
+		- \(4\) *废除的元素
 	- 2. H5新增属性
+		- \(1\) 表单相关属性
+			- form
+			- formaction
+			- formmethod
+			- formenctype
+			- formtarget
+			- autofocus
+			- require
+			- labels
+			- placeholder
+			- datalist
+			- autocomplete
+			- pattern
+			- selectionDirection
+			- indeterminate
+			- image按钮的width/height
+		- \(2\) 链接相关属性
+		- \(3\) 其他属性
+		- \(4\) *废除属性
+		- \(5\) 全局属性
 	- 3. H5选择器补充
+		- querySelectorAll 对比 getElements 的优势
+		- jQuery的选择器即是querySelectorAll
 	- 4. H5自定义属性 dataset
 	- 5. H5元素类名操作 classList
+		- 隐式原型上的方法\(不一一列举\)
 	- 6. H5本地存储 localStorage
+		- Web Storage实际上由两部分组成：sessionStorage与localStorage
+		- sessionStorage与localStorage操作相同
 	- 7. H5地理位置 geolocation
+		- \(1\) 测试用例
+			- PositionError
+		- \(2\) 百度地图API
 	- 8. H5音频 audio
+		- \(1\) 属性
+		- \(2\) 方法
+		- \(3\) 应用：钢琴弹奏
+		- \(4\) 应用：音乐播放器
 	- 9. H5视频 video
+		- \(1\) 属性
+		- \(2\) 方法
 	- 10. H5文件 FileReader
+		- \(1\) 文件拖拽
+		- \(2\) File接口
+		- \(3\) 示例
 	- 11. H5 web工作线程 webworker
+		- \(1\) 方法
+		- \(2\) 示例
 	- 12. H5 webSocket 网络套接字
 	- 13. H5画布 canvas
+		- \(1\) 应用 canvas笑脸
+		- \(2\) 应用 canvas画图
+		- \(3\) 应用 canvas变换
+		- \(4\) 应用 canvas内长方形拖拽
+		- \(5\) 应用 canvas内圆形拖拽
+		- \(6\) 应用 下载canvas绘图
+		- \(7\) 应用 canvas运动回调
+		- \(8\) canvas框架 jCanvaScript.js
 	- 14. H5内联SVG
+		- \(1\) 位图 && 矢量图
+		- \(2\) SVG使用
+		- \(3\) SVG梗概
+		- \(4\) SVG应用
+			- 2017
+		- \(5\) 矢量图形库 Raphael.js
 - blog28 \(杂技\)
 	- 1. toString\(\) && valueOf\(\)
 	- 2. JSON stringify & parse
 	- 3. +new Date\(\)
 	- 4. Array.prototype.slice.call\(arguments, 0\) 剖析
 	- 5. JS Bridge建立Native与H5间通信
+		- Hybrid通信原理
+		- JS Bridge
 - blog29 \(css3\)
 	- 1. CSS3老版浏览器兼容处理
 	- 2. CSS3新增选择器
+		- 属性选择器
+		- 结构选择器
 	- 3. CSS3新增属性
+		- 色值透明度 rgba
+		- 文字阴影 text-shadow
+		- 文字省略 text-overflow
+		- 圆角 border-radius
+		- 盒子阴影 box-shadow
+		- 变换 transform \(搭配transition使用效果更佳\)
+		- 过渡 transition
+		- 动画 animation
+		- 视角 perspectiv
+		- 文字转向 direction
+		- 遮罩 -webkit-mask
+		- 倒影 box-reflect
+		- 文字阴影 text-shadow
+		- 调整尺寸 resize
+		- background-image内的一些属性
+			- linear-gradient 线性渐变
+			- radial-gradient 径向渐变
+			- repeating-linear-gradient 重复渐变
+		- background相关属性
+			- background-origin 相对于内容框来定位背景图像
+			- background-clip 裁剪背景图片
+			- background-attachment
+			- background-size 背景图像尺寸
+			- background-position 背景图像定位
+		- 滤镜 filter
 	- 4. CSS3媒体查询 media
+		- 媒体类型
+		- 媒体功能
+		- meida大全
 - blog30
 - blog \(bootstrap\)
 - blog \(es6\)
@@ -5851,6 +6104,8 @@ F0=0，F1=1，Fn=F(n-1)+F(n-2)（n>=2，n∈N*）
 ```
 
 ### Array.reduce原理
+
+- 计算数组元素相加后的总和
 
 ```
 <script>

@@ -39,3 +39,7 @@ function def (obj, key, val, enumerable) {
     </script>
 </body>
 ```
+
+## vue的组件的props属性支持驼峰命名,不支持连接线命名,使用是用连接线进行赋值或者数据绑定
+
+![](https://images2015.cnblogs.com/blog/797623/201702/797623-20170203174733792-236682446.png)

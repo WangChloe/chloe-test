@@ -803,7 +803,6 @@ console.log('reflect has', Reflect.has(obj,'name'));  //reflect has true
   - Pending -> Fulfilled
   - Pending -> Rejected
 
-
 - Promise构造函数接受一个函数作为参数，该函数的两个参数分别是resolve(必写)和reject(可选)
   - resolve (Pending -> Resolved) 未完成->成功
   - reject (Pending -> Rejected) 未完成->失败
