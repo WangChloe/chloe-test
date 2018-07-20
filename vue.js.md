@@ -1,4 +1,4 @@
-```
+``` javascript
 /*!
  * Vue.js v2.3.3
  * (c) 2014-2017 Evan You

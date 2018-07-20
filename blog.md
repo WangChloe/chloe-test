@@ -5422,6 +5422,31 @@ fn: 帮助
 	})
 </script>
 ```
+- stringObject.replace(regexp/substr,replacement)
+  - replacement `$1、$2、...、$99` -> 与 regexp 中的第 1 到第 99 个子表达式(小括号)相匹配的文本
+  - replacement `$&` -> 与regexp相匹配的子串
+  - replacement `$`\`-> 位于匹配子串左侧的文本。
+  - replacement `$'` -> 位于匹配子串右侧的文本
+
+``` javascript
+
+function getQueryObject(url) {
+	url = url == null ? window.location.href : url;
+	var search = url.substring(url.lastIndexOf("?") + 1);
+	var obj = {};
+	var reg = /([^?&=]+)=([^?&=]*)/g;
+
+	// 
+	search.replace(reg, function(rs, $1, $2) {
+		var name = decodeURIComponent($1);
+		var val = decodeURIComponent($2);
+		val = String(val);
+		obj[name] = val;
+		return rs;
+	});
+	return obj;
+}
+```
 
 ## 5. 特殊字符
 - `.`  匹配**任何**单字符(除换行符\n)
