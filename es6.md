@@ -52,7 +52,7 @@
 
 - 独一无二的值
 
-```
+``` javascript
 let a1 = Symbol();
 let a2 = Sybmol();
 
@@ -62,6 +62,8 @@ let a3 = Sybmol.for('a3');
 let a4 = Sybmol.for('a3');
 
 console.log(a3 === a4); // true
+console.log(typeof Symbol); // function
+console.log(Symbol.toString()); // "function Symbol() { [native code] }"
 ```
 
 # 数据结构
@@ -82,7 +84,7 @@ console.log(a3 === a4); // true
 
 - `map.clear()`
 
-```
+``` javascript
 const map = new Map([
   ['name', 'Chloe']，
   ['title', 'Author']
@@ -110,13 +112,16 @@ console.log(map2, map2.get(arr)); // {["123"] => "456"}  "456"
 
 - 类似数组，但是成员的值都是唯一的，没有重复的值。
 
-```
+``` javascript
 let arr1 = [1, 2, 3 ,1];
 
 let list3 = new Set(arr1);
 
 console.log(list3); // {1, 2, 3, 4}
 console.log(list3.size); // 4
+
+console.log(typeof Set); // function
+console.log(Set.toString()); // "function Set() { [native code] }"
 ```
 
 - `list.size`
@@ -132,7 +137,7 @@ console.log(list3.size); // 4
 
 - 遍历
 
-```
+``` javascript
 let arr = ['add', 'delete', 'clear'];
 let list = new Set(arr);
 
@@ -142,7 +147,7 @@ for(let key of lists.leys()) {
 
 list.forEach(function(item) {
   console.log(item)
-  })
+})
 ```
 
 ### WeakSet
@@ -159,7 +164,7 @@ let & var
 
 ### let声明的变量只在当前代码块内有效
 
-```
+``` javascript
 {
     let a = 10;
     var b = 1;
@@ -172,7 +177,7 @@ b  // 1
 
 - eg: 可用于for循环计数
 
-```
+``` javascript
 var a = [];
 for (var i = 0; i < 10; i++) {
   a[i] = function () {
@@ -182,7 +187,7 @@ for (var i = 0; i < 10; i++) {
 a[6](); // 10
 ```
 
-```
+``` javascript
 var a = [];
 for (let i = 0; i < 10; i++) {
   a[i] = function () {
@@ -194,7 +199,7 @@ a[6](); // 6
 
 ### for循环变量为副作用域，循环内部为子作用域，let范围不冲突不交叉
 
-```
+``` javascript
 for(let i = 0; i < 3; i++) {
     let i = 'abc';
     console.log(i);
@@ -207,7 +212,7 @@ for(let i = 0; i < 3; i++) {
 
 #### 字符串遍历器
 
-```
+``` javascript
 let str = 'abc';
 
 for(let code of str) {
@@ -217,7 +222,7 @@ for(let code of str) {
 
 ### 不存在变量提升
 
-```
+``` javascript
 console.log(foo); // undefined
 var foo = 2;
 
@@ -227,7 +232,7 @@ let bar = 2;
 
 ### 暂时性死区
 
-```
+``` javascript
 var tmp = 123;
 
 if(true) {
@@ -238,7 +243,7 @@ if(true) {
 
 let绑定了if语句的块级作用域
 
-```
+``` javascript
 var x = x; // 不报错
 
 let x = x; // 报错
@@ -246,7 +251,7 @@ let x = x; // 报错
 
 ### 不允许重复声明
 
-```
+``` javascript
 // 报错
 function func() {
     let a = 10;
@@ -260,7 +265,7 @@ function func() {
 }
 ```
 
-```
+``` javascript
 function func(arg) {
     let arg; // 报错
 }
@@ -280,7 +285,7 @@ function func(arg) {
 
 - 同时，函数声明还会提升到所在的块级作用域的头部。
 
-```
+``` javascript
 // *浏览器的 ES6 环境
 function f() { console.log('I am outside!'); }
 
@@ -298,7 +303,7 @@ function f() { console.log('I am outside!'); }
 
 **优化 => 推荐函数表达式**
 
-```
+``` javascript
 // 函数声明语句
 {
   let a = 'secret';
@@ -329,7 +334,7 @@ function f() { console.log('I am outside!'); }
 
 复合类型的数据(对象、数组等) => 指针地址
 
-```
+``` javascript
 const foo = {};
 
 // foo可以添加自身属性
@@ -349,8 +354,8 @@ a = ['Chloe'];  // 报错，不能指向另一个数组
 
 引用第三方库的时声明的变量，用const来声明可以避免未来不小心重命名而导致出现bug。
 
-```
-const monent = require('moment')
+``` javascript
+const monent = require('moment');
 ```
 
 ## ES5 & ES6 声明变量
@@ -366,12 +371,12 @@ const monent = require('moment')
 
 - let命令、const命令、class命令声明的全局变量，不属于顶层对象的属性
 
-```
+``` javascript
 var a = 1;
-window.a // 1
+window.a; // 1
 
 let b = 1;
-window.b // undefined
+window.b; // undefined
 ```
 
 ## global对象
@@ -397,7 +402,7 @@ window.b // undefined
 
 - 方法一
 
-```
+``` javascript
 (typeof window !== 'undefined'
     ? widnow
     : (typeof process === 'object' &&
@@ -409,7 +414,7 @@ window.b // undefined
 
 - 方法二
 
-```
+``` javascript
 var getGlobal = function () {
     if(typeof self !== 'undefined') { return self; }
     if(typeof window !== 'undefined') { return window; }
@@ -425,7 +430,7 @@ var getGlobal = function () {
 
 ## 数组的解构赋值
 
-```
+``` javascript
 let [a, b, c] = [1, 2, 3];
 
 let [x, , y] = [1, 2, 3];
@@ -453,7 +458,7 @@ d // 4
 > ES6 内部使用严格相等运算符（===），判断一个位置是否有值。所以，只有当一个数组成员严格等于undefined，默认值才会生效。
 
 
-```
+``` javascript
 let [x, y = 'b'] = ['a', undefined]; // x='a', y='b'
 
 let [x = 1] = [undefined]; // x=1
@@ -467,20 +472,20 @@ let [x = 1] = [null]; // x=null
 
 > 对象的属性没有次序，变量必须与属性同名，才能取到正确的值。
 
-```
+``` javascript
 let { bar, foo } = { foo: "aaa", bar: "bbb" };
 foo // "aaa"
 bar // "bbb"
 
 let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
-baz // "aaa"
-foo // foo is not defined 
+console.log(baz); // "aaa"
+console.log(foo); // foo is not defined 
 ```
 
 > 解构赋值的内部机制：先找到同名属性，然后再赋给对应的变量。真正被赋值的是baz而不是foo。
 
 
-```
+``` javascript
 // es5
 let cat = 'ken'
 let dog = 'lili'
@@ -489,14 +494,14 @@ let zoo = {cat: cat, dog: dog}  // {cat: 'ken', dog: 'lili'}
 // es6
 let cat = 'ken'
 let dog = 'lili'
-let zoo = {cat, dog} // {cat: 'ken', dog: 'lili'}
+let zoo = {cat, dog}; // {cat: 'ken', dog: 'lili'}
 ```
 
 ## 应用
 
 - 变量交换
 
-```
+``` javascript
 {
   let a = 1;
   let b = 2;
@@ -511,7 +516,7 @@ let zoo = {cat, dog} // {cat: 'ken', dog: 'lili'}
 
 - super()
 
-```
+``` javascript
 class Animal {
   // 构造方法
     constructor(){
@@ -535,13 +540,13 @@ class Cat extends Animal {
 }
 
 let cat = new Cat()
-cat.says('hello') //cat says hello
+cat.says('hello'); //cat says hello
 ```
 
 
 # arrow function 箭头函数
 
-```
+``` javascript
 // es5
 function(i) {
   return i + 1;
@@ -571,7 +576,7 @@ let bar = (a, b) => a * b;
 
 - 数组应用
 
-```
+``` javascript
 let arr = [ 5, 6, 7, 8, 'a' ];
 let b = arr.map( item => item + 3 );
 console.log(b); // [ 8, 9, 10, 11, 'a3' ]
@@ -581,7 +586,7 @@ console.log(b); // [ 8, 9, 10, 11, 'a3' ]
 
 > 原理：箭头函数没有自己的this，他的this是继承外面的，因此内部的this就是外层代码块的this。
 
-```
+``` javascript
 class Animal {
     constructor(){
         this.type = 'animal'
@@ -594,7 +599,7 @@ class Animal {
 }
 
 var animal = new Animal()
-animal.says('hi')  //animal says hi
+animal.says('hi');  //animal says hi
 ```
 
 
@@ -604,7 +609,7 @@ animal.says('hi')  //animal says hi
 
 - `${xxx}` 引用变量
 
-```
+``` javascript
 var fName = 'Peter', sName = 'Smith', age = 43, job = 'photographer';
 var a = 'Hi, I\'m ' + fName + ' ' + sName + ', I\'m ' + age + ' and work as a ' + job + '.';
 var b = `Hi, I'm ${ fName } ${ sName }, I'm ${ age } and work as a ${ job }.`;
@@ -621,7 +626,7 @@ $("#result").append(`
 
 - 将多个参数合并到一个数组中
 
-```
+``` javascript
 console.log(...[1,2,3]); // 1 2 3
 
 let a = [3, 4, 5];
@@ -635,7 +640,7 @@ foo( ...data); // a=5, b=15, c=2
 
 - 将数组或对象分散到新的数组或对象中
 
-```
+``` javascript
 let a = [1, 2, 3];
 let b = [ ...a ];
 let c = a;
@@ -651,7 +656,7 @@ console.log(c);  // [1, 2, 3, 5] referencing the same array
 
 ## default
 
-```
+``` javascript
 // es5
 function animal(type) {
   type = type || 'cat'
@@ -670,12 +675,12 @@ function animal(type = 'cat') {
 
 - 参数变量是一个数组，该变量将多余的参数放入数组中
 
-```
+``` javascript
 function animals(...types) {
   console.log(type)
 }
 
-animals('cat', 'dog', 'fish') // ["cat", "dog", "fish"]
+animals('cat', 'dog', 'fish'); // ["cat", "dog", "fish"]
 ```
 
 # import export
@@ -691,7 +696,7 @@ animals('cat', 'dog', 'fish') // ["cat", "dog", "fish"]
 
 - require.js
 
-```
+``` javascript
 // content.js
 define('content.js', function() {
   return 'A cat'
@@ -700,12 +705,12 @@ define('content.js', function() {
 // index.js
 require(['./content.js'], function(animal) {
   console.log(animal); // A cat
-  })
+  });
 ```
 
 - CommonJS
 
-```
+``` javascript
 // index.js
 var animal = require('./content.js')
 
@@ -715,7 +720,7 @@ module.exports = 'A cat'
 
 ## es6
 
-```
+``` javascript
 // index.js
 import animal from './content'
 
@@ -727,7 +732,7 @@ export default 'A cat'
 
 ## Proxy
 
-```
+``` javascript
 let obj = {
   name:'gao',
   time:'2017-08-13',
@@ -777,7 +782,7 @@ console.log('delete',temp);   //delete  {name: "he", temp: "123"}
 > 不管Proxy怎么修改默认行为，总可以在Reflect上获取默认行为。
 
 
-```
+``` javascript
 let obj = {
   name:'gao',
   time:'2017-08-13',
@@ -788,9 +793,17 @@ console.log('reflect get',Reflect.get(obj, 'name'));  // reflect get gao
 Reflect.set(obj,'name','hexaiofei');
 console.log(obj);  // {name: "hexaiofei", time: "2017-08-13", emp: "123"}
 console.log('reflect has', Reflect.has(obj,'name'));  //reflect has true
+
+console.log(typeof Reflect); // "object"
+console.log(Reflect.ownKeys.toString()); // "function ownKeys() { [native code] }"
 ```
 
 # Promise
+
+``` javascript
+console.log(typeof Promise); //"function"
+console.log(Promise.toString()); //"function Promise() { [native code] }"
+```
 
 >  异步编程解决方案
 
@@ -809,7 +822,7 @@ console.log('reflect has', Reflect.has(obj,'name'));  //reflect has true
 
 > Promise实例生成以后，可以用then方法分别指定Resolved状态和Rejected状态的回调函数。
 
-```
+``` 
 // ES5回调函数
 let ajax = function(callback) {
   console.log('hello');
@@ -841,7 +854,7 @@ ajax().then(function() {
 
 - promise用法
 
-```
+``` javascript
 promise.then(function(value) {
   // success
 }, function(error) {
@@ -849,10 +862,9 @@ promise.then(function(value) {
 });
 ```
 
-
 - promise对象回调处理详解
 
-```
+``` javascript
 console.log('我是顺序运行的1号');
 
 //回调测试1，带promise实例化时的参数
@@ -910,7 +922,7 @@ console.log('我是顺序运行的3号');
 
 # for...of循环
 
-```
+``` javascript
 let a = ['a', 'b', 'c', 'd'];
 
 for(var val of a) {

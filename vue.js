@@ -402,6 +402,7 @@ var config = ({
 
 /*  */
 
+// Object.freeze()阻止修改现有属性的特性和值，并阻止添加新属性。
 var emptyObject = Object.freeze({});
 
 /**
@@ -612,17 +613,24 @@ function isNative (Ctor) {
 var hasSymbol =
   typeof Symbol !== 'undefined' && isNative(Symbol) &&
   typeof Reflect !== 'undefined' && isNative(Reflect.ownKeys);
+// console.log(typeof Symbol); // "function"
+// console.log(Symbol.toString()); // "function Symbol() { [native code] }"
+
+// console.log(typeof Reflect); // "object"
+// console.log(Reflect.ownKeys.toString()); // "function ownKeys() { [native code] }"
 
 /**
  * Defer a task to execute it asynchronously.
+ * 延迟任务异步执行
  */
 var nextTick = (function () {
   var callbacks = [];
-  var pending = false;
+  var pending = false; // 进行中
   var timerFunc;
 
   function nextTickHandler () {
     pending = false;
+    // 浅拷贝
     var copies = callbacks.slice(0);
     callbacks.length = 0;
     for (var i = 0; i < copies.length; i++) {
@@ -636,9 +644,15 @@ var nextTick = (function () {
   // UIWebView in iOS >= 9.3.3 when triggered in touch event handlers. It
   // completely stops working after triggering a few times... so, if native
   // Promise is available, we will use it:
+
+  // nextTick行为促使了可以通过原生Promis.then或者MutationObserver的微任务队列改变。
+  // MutationObserver得到了更广泛的支持，但在ios版本大于9.3.3的触摸事件上有严重的问题。
+  // 它在触发一段时间后完全停止，所以，如果原生Promis是可用的情况下，我们才使用它。
   /* istanbul ignore if */
   if (typeof Promise !== 'undefined' && isNative(Promise)) {
-    var p = Promise.resolve();
+    // console.log(typeof Promise); //"function"
+    // console.log(Promise.toString()); //"function Promise() { [native code] }"
+    var p = Promise.resolve();  // 成功cb
     var logError = function (err) { console.error(err); };
     timerFunc = function () {
       p.then(nextTickHandler).catch(logError);
@@ -654,6 +668,7 @@ var nextTick = (function () {
     // PhantomJS and iOS 7.x
     MutationObserver.toString() === '[object MutationObserverConstructor]'
   )) {
+    // Mutation Observer API 用来监视 DOM 变动。DOM 的任何变动，比如节点的增减、属性的变动、文本内容的变动，这个 API 都可以得到通知。
     // use MutationObserver where native Promise is not available,
     // e.g. PhantomJS IE11, iOS7, Android 4.4
     var counter = 1;
@@ -732,6 +747,7 @@ var uid = 0;
 /**
  * A dep is an observable that can have multiple
  * directives subscribing to it.
+* DEP是可观察的，可以有多个指令订阅它。
  */
 var Dep = function Dep () {
   this.id = uid++;
@@ -752,6 +768,7 @@ Dep.prototype.depend = function depend () {
   }
 };
 
+// 通知
 Dep.prototype.notify = function notify () {
   // stabilize the subscriber list first
   var subs = this.subs.slice();
@@ -778,6 +795,7 @@ function popTarget () {
 /*
  * not type checking this file because flow doesn't play well with
  * dynamically accessing methods on Array prototype
+ * 不能对该文件进行类型检查，因为流对数组原型的动态访问方法没有很好的效果
  */
 
 var arrayProto = Array.prototype;
@@ -798,6 +816,8 @@ var arrayMethods = Object.create(arrayProto);[
 
     // avoid leaking arguments:
     // http://jsperf.com/closure-with-arguments
+    // 避免泄露参数
+    // *传递arguments给任何参数，将导致Chrome和Node中使用的V8引擎跳过对其的优化，这也将使性能相当慢。
     var i = arguments.length;
     var args = new Array(i);
     while (i--) {
@@ -833,6 +853,8 @@ var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
  * also converted to become reactive. However when passing down props,
  * we don't want to force conversion because the value may be a nested value
  * under a frozen data structure. Converting it would defeat the optimization.
+ * 默认情况下，当设置了一个灵活的属性时，新值也被转换为灵活的。
+ * 然而，当通过props时，我们不想强制转换，因为该值可能是冻结数据结构下的嵌套值。转换它将击败优化。
  */
 var observerState = {
   shouldConvert: true,
