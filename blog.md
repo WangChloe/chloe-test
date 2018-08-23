@@ -1678,9 +1678,21 @@ function unique(arr){
 
 ``` javascript
 <script>
+var arr = ['A', 'B', 'C'];
+var r = arr.filter(function (element, index, self) {
+ console.log(element); // 依次打印'A', 'B', 'C'
+ console.log(index); // 依次打印0, 1, 2
+ console.log(self); // self就是变量arr
+ return true;
+});
+</script>
+```
+
+```
+<script>
 var r,arr = ['apple', 'strawberry', 'banana', 'pear', 'apple', 'orange', 'orange', 'strawberry'];
  
-r = arr.filter(function (element, index, self) {
+r = arr.filter(function (element, index, self) { 
  return self.indexOf(element) === index;
 });
  
