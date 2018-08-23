@@ -80,6 +80,7 @@
 		- \(5\)二分法
 		- \(6\)Map\(ES6\)
 		- \(7\)Set\(ES6\)
+		- \(8\)Array.filter
 	- 补一个字符串的应用
 		- \(1\) 字符串中出现次数最多的字符
 - blog6
@@ -1670,6 +1671,20 @@ function unique(arr){
     var set = new Set(arr);
     return Array.from(set);
 }
+</script>
+```
+
+### (8)Array.filter
+
+``` javascript
+<script>
+var r,arr = ['apple', 'strawberry', 'banana', 'pear', 'apple', 'orange', 'orange', 'strawberry'];
+ 
+r = arr.filter(function (element, index, self) {
+ return self.indexOf(element) === index;
+});
+ 
+console.log(r.toString());
 </script>
 ```
 
