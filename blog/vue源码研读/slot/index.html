@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>slot</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+	<link rel="stylesheet" href="http://static2.51fanli.net/common/css/base.css">
+	<script id="J_script_attrsniffer" data-remwidth="750" data-remswitch="1" src="https://static2.51fanli.net/static/?f=webapp/js/common/attrsniffer.js"></script>
+	<script src="https://static2.51fanli.net/common/libs/fmu/js/vendors/jquery/jquery.min.js"></script>
+	<script src="https://static2.51fanli.net/common/libs/fmu/js/vendors/vue/vue.js"></script>
+	<style>
+	* { font-size: .28rem; }
+	.tabitem { width: 1.8rem; height: .4rem; }
+	.proitem { width: 7.1rem; height: 2rem; margin: .2rem; background: #FFA4DB; color:#86DCF1; }
+	h3 { font-size: .36rem; }
+	h4 { margin-top: .1rem; font-size: .3rem; }
+	.act { background-color: #fe0; }
+	</style>
+</head>
+<body>
+	<div id="J_app">
+		<slot name="tabbox"></slot>
+		<slot name="prolist"></slot>
+
+		<ul slot="tabbox">
+			<slot name="tab" v-for="tabitem in tablist"></slot>
+		</ul>
+		<li class="tabitem" slot="tab">tabitem here</li>
+
+		<section slot="prolist">
+			<slot name="pro" v-for="proitem in prolist"></slot>
+		</section>
+
+		<div class="proitem" slot="pro">proitem here</div>
+	</div>
+
+	<h3>slot解析</h3>
+	<h4>1.单个slot</h4>
+	<div id="J_app1">
+		<first-child>
+			<p v-if="title">{{title}}</p>
+		</first-child>
+	</div>
+
+	<h4>2.具名slot</h4>
+	<div id="J_app2">
+		<second-child>
+			<h4 slot="header">Header</h4>
+			<p>父组件content</p>
+			<h4 slot="footer">Footer</h4>
+		</second-child>
+	</div>
+
+	<h4>3.作用域slot</h4>
+	<div id="J_app3">
+		<third-child>
+			<template scope="props">
+				<p>父组件content</p>
+				<p>{{props.msg}}</p>
+				<p>{{props.ding}}</p>
+			</template>
+		</third-child>
+	</div>
+
+
+	<h3>:is属性制作tab选项卡</h3>
+	<h4>Vue.js 提供了一个特殊的元素＜component> 用来动态地挂载不同的组件， 使用is特性来选择要挂载的组件。</h4>
+	<div id="J_app4">
+		<ul>
+			<li @click="toggle(index ,tab.view)" v-for="(tab,index) in tabs" :class="{act:active===index}">
+				{{tab.type}}
+			</li>
+		</ul>
+		<component :is="currentView"></component>
+	</div>
+
+	<script src="./index.js"></script>
+</body>
+</html>
