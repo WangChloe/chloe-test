@@ -1,8 +1,8 @@
 <!-- MarkdownTOC -->
 
 - 生命周期
-    - vue 生命周期
-    - 小程序生命周期
+  - vue 生命周期
+  - 小程序生命周期
 - 模版语法
 - 常见问题
 
@@ -123,7 +123,7 @@ new Vue({
 
 
 - 组件不支持列表
-  - 暂不支持在组件引用时，在组件上定义 click 等原生事件、v-show（可用 v-if 代替）和 class style 等样式属性(例：<card class="class-name"> </card> 样式是不会生效的)，因为编译到 wxml，小程序不会生成节点，建议写在内部顶级元素上。
+  - 暂不支持在组件引用时，在组件上定义 click 等原生事件、v-show（可用 v-if 代替）和 class style 等样式属性(例：`<card class="class-name"> </card>` 样式是不会生效的)，因为编译到 wxml，小程序不会生成节点，建议写在内部顶级元素上。
   - Slot（scoped 暂时还没做支持）
   - 动态组件
   - 异步组件
@@ -190,7 +190,7 @@ export default {
 6. 本地资源无法通过 WXSS 获取
 
 **本地资源非base64图不会显示**
-background-image：可以使用网络图片，或者 base64，或者使用<image/>标签
+background-image：可以使用网络图片，或者 base64，或者使用`<image/>`标签
 
 
 7. ajax封装

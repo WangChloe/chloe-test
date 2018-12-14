@@ -239,6 +239,8 @@
 	- 8. 转义字符
 	- 9.单词边界
 	- 10. 简单示例
+	- 11. 分组语法
+	- 12. 贪婪与懒惰
 - blog20\(正则应用\)
 	- 1. 校验座机号码
 	- 2. 校验邮箱
@@ -1763,7 +1765,7 @@ console.log(r.toString());
 
 ---
 
-##1. select下拉框的相关属性
+## 1. select下拉框的相关属性
 - 选中的索引值
 oSel.selectedIndex
 - 获取所有选项
@@ -1777,7 +1779,7 @@ oSel.options.add(option);
 - 删除选项
 oSel.options.remove(index);
 
-##2. 预解析
+## 2. 预解析
 变量和函数的定义会预先解析，解析在当前script标签内的最上面
 > 作用域：(1)script (2)函数
 
@@ -1797,19 +1799,19 @@ oSel.options.remove(index);
 </script>
 ```
 
-##3. 已知计算机编码查看对应单词
+## 3. 已知计算机编码查看对应单词
 String.fromCharCode('0x4e00');	 // 对应中文 "一"
 - 第一个中文 	0x4e00 一
 - 最后一个中文	0x9fa5 龥(yu)
 
 **unicode编码：以\u开头 \u4e00(一) ~ \u9fa5(龥)**
 
-##4. 字节长度和编码的关系
+## 4. 字节长度和编码的关系
 英文、数字都占1个字节，与编码格式无关
 UTF-8；中文占3个字节
 GB2312：中文占2个字节
 
-###封装一个求字节长度的函数
+### 封装一个求字节长度的函数
 ``` javascript
 <script>
 	function getBytesLen(str, type) {	// 字符串，编码格式
@@ -1831,7 +1833,7 @@ GB2312：中文占2个字节
 </script>
 ```
 
-##5. 严格模式
+## 5. 严格模式
 **非严格模式下，没有用var定义变量时为全局变量，全局的东西都属于window**
 ``` javascript
 <script>
@@ -1890,8 +1892,8 @@ GB2312：中文占2个字节
 </script>
 ```
 
-##6. 连等及逗号运算符
-###连等
+## 6. 连等及逗号运算符
+### 连等
 **函数内部使用连等定义变量，第一个是局部变量，其余是全局变量。**
 
 ``` javascript
@@ -1902,7 +1904,7 @@ GB2312：中文占2个字节
 </script>
 ```
 
-###逗号运算符
+### 逗号运算符
 **逗号运算符 以最后一个为准**
 
 ``` javascript
@@ -1916,7 +1918,7 @@ GB2312：中文占2个字节
 </script>
 ```
 
-##7. 文本提示框
+## 7. 文本提示框
 聚焦事件：oT.onfocus = function() {};
 失焦事件：oT.onblur = function() {};
 > 强制获取一个焦点：oT.focus();
@@ -1924,9 +1926,9 @@ GB2312：中文占2个字节
 
 ##8. form表单
 想要提交数据须有
-1. action 提交的地址 <form action=''></form>
-2. name   数据名称   <input name="user.tel" />
-3. value  数据       input.value
+1. action 提交的地址 `<form action=''></form>`
+2. name   数据名称   `<input name="user.tel" />`
+3. value  数据       `input.value`
 
 提交方式
 1. get(默认) 容量32K左右  不安全，有缓存
@@ -4140,10 +4142,10 @@ var oSrc = oEvent.srcElement || oEvent.target;
 
 ## 3. 注释的写法 
 
-<!-- header -->
-<header>xxx</header>
+`<!-- header -->`
+`<header>xxx</header>`
 
-<!-- end header -->
+`<!-- end header -->`
 
 ## 4. id命名 
 
@@ -5529,6 +5531,35 @@ var reg = /\d/;  -> 选项  /\d/g;  ->  匹配一次或多次  /\d+/g
 - `/.+/`    任意多个
 - `/.*/`    可有可无
 
+## 11. 分组语法
+
+通过`()`指定子表达式，**从左到右，以分组的左括号为标志，第一个出现的分组的组号为1，第二个为2。(分组0对应整个正则表达式)**
+
+- 捕获
+  - `(exp)` 匹配exp，并捕获文本到自动命名的组里
+  - `(?exp)` 匹配exp，并捕获文本到名称为name的组里，也可以写成(?'name'exp)
+  - `(?:exp)` 匹配exp，不捕获匹配的文本，也**不给此分组分配组号**
+
+- 零宽断言 要捕获的内容前后必须是某些特定的内容，但又不捕获这些特定类容的时候，使用零宽断言。
+  - `(?=exp)` 断言匹配内容的**后面是**表达式exp
+  - `(?<=exp)` 断言匹配内容的**前面是**表达式exp
+  - `(?!exp)` 断言匹配内容的**后面不是**表达式exp
+  - `(?<!exp)` 断言匹配内容的**前面不是**表达式exp
+
+## 12. 贪婪与懒惰
+> 贪婪：匹配整个字符串。
+懒惰：匹配尽可能少的字符，表达式后加`?`问号。
+
+懒惰限定符
+
+- `*?` 重复任意次，但尽可能少重复
+- `+?` 重复1次或更多次，但尽可能少重复
+- `??` 重复0次或1次，但尽可能少重复
+- `{n,m}?` 重复n到m次，但尽可能少重复
+- `{n,}?` 重复n次以上，但尽可能少重复
+
+
+
 
 ---
 
@@ -5695,7 +5726,7 @@ wangchloe@yeah.net
 - CSS
   - 将样式表置顶
   - 避免使用CSS表达式(Expression)
-  - 用<link>代替@import
+  - 用`<link>`代替@import
   - 避免使用Filters(滤镜)
 - JavaScript
   - 把脚本置于页面底部
@@ -10395,7 +10426,7 @@ function bridgeApp(protocol) {
 
 ---
 
-- `:target`  设置跳转锚点属性  <a href="#div1"></a> -> <div id="div1"></div>
+- `:target`  设置跳转锚点属性  `<a href="#div1"></a>` -> `<div id="div1"></div>`
 
 - `:disabled`  不可点击的表单控件
 
@@ -10452,7 +10483,7 @@ text-shadow: [x轴 y轴 模糊度 弥散度 颜色]
 ### 圆角 border-radius
 `border-radius: 10px 20px 30px 40px` -> 左上角起顺时针经过的角的顺序
 
-`border-radius: 10px 20px 30px 40px / 30px 10px 40px 20px`  **/** -> 分离x/y轴方向半径
+`border-radius: 10px 20px 30px 40px / 30px 10px 40px 20px`   -> 分离x/y轴方向半径
 
 ### 盒子阴影 box-shadow
 `box-shadow: [inset]  10px   20px   30px      40px   black;`

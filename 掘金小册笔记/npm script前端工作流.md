@@ -5,7 +5,10 @@
 	- npm run
 		- 示例分析
 		- eslint配置过程
-- 多个npm script串行&并行
+	- 多个npm script串行&并行
+	- npm script传参
+	- npm script注册
+	- npm script钩子
 
 <!-- /MarkdownTOC -->
 
@@ -58,7 +61,7 @@
 
 - 运行命令
 
-## 多个npm script串行&并行
+### 多个npm script串行&并行
 
 ```
 {
@@ -74,6 +77,79 @@
 	}
 }
 ```
+
+
+或
+
+install `npm-run-all`
+
+```
+{
+	"scripts": {
+		"lint:js": "eslint *.js",
+		"lint:css": "stylelint *.less",
+		"lint:json": "jsonlint --quiet *.json",
+		"lint:markdown": "markdownlint --config .markdownlint.json *.md",
+		"testbefore": "mocha tests/"
+		"test": "npm run lint:js && npm run lint:css && npm run lint:json && npm run lint:markdown && mocha tests/" // 串行
+		"test": "npm run lint:js & npm run lint:css & npm run lint:json & npm run lint:markdown & mocha tests/" // 并行
+		"test": "npm run lint:js & npm run lint:css & npm run lint:json & npm run lint:markdown & mocha tests/ & wait" // 解决并行时效问题
+		"test": "npm-run-all lint:* mocha" // npm-run-all
+		"test": "npm-run-all --parallel lint:* mocha" // npm-run-all 并行
+	}
+}
+```
+
+### npm script传参
+
+`--fix` 传参
+
+```
+{
+	"scripts": {
+		"lint:js:fix": "eslint *.js --fix",
+	}
+}
+```
+
+### npm script注册
+
+- 方法一
+
+`//` package.json中增加`//`为键的值，注释写在对应的值里，npm会忽略这种键。
+
+```
+{
+	"scripts": {
+		"//": "给下面的test命令进行注释：运行所有代码检查和单元测试",
+		"test": "npm-run-all --parallel lint:* mocha"
+	}
+}
+```
+
+- 方法二
+
+利用shell命令的性质在命令前增加注释
+
+`\n`换行符用于将注释和命令分隔开
+
+```
+{
+	"scripts": {
+		"test": "# 运行所有代码检查和单元测试 \n    npm-run-all --parallel lint:* mocha"
+	}
+}
+```
+
+### npm script钩子
+
+钩子： `pre` 、`post`
+
+`npm run test`的三个周期：
+1. 检查 scripts 对象中是否存在 `pretest` 命令，如果有，先执行该命令；
+2. 检查是否有 `test` 命令，有的话运行 test 命令，没有的话报错；
+3. 检查是否存在 `posttest` 命令，如果有，执行 posttest 命令；
+
 
 
 
