@@ -150,6 +150,19 @@ install `npm-run-all`
 2. 检查是否有 `test` 命令，有的话运行 test 命令，没有的话报错；
 3. 检查是否存在 `posttest` 命令，如果有，执行 posttest 命令；
 
+```
+     "//": "增加简单的 lint 命令，并行运行所有的 lint 子命令",
++    "lint": "npm-run-all --parallel lint:*",
+     "lint:js": "eslint *.js",
+     "lint:js:fix": "npm run lint:js -- --fix",
+     "lint:css": "stylelint *.less",
+     "lint:json": "jsonlint --quiet *.json",
+     "lint:markdown": "markdownlint --config .markdownlint.json *.md",
+-    "mocha": "mocha tests/",
+-    "test": "# 运行所有代码检查和单元测试 \n    npm-run-all --parallel lint:* mocha"
++    "pretest": "npm run lint",
++    "test": "mocha tests/",
+```
 
 
 
